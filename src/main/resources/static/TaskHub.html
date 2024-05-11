@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="Collaborativetaskboardimages/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="CSS/taskBoardStyle.css">
+  <link rel="stylesheet" href="CSS/projectSectionBarStyle.css">
+  <link rel="stylesheet" href="CSS/contributerStyle.css">
+  <link rel="stylesheet" href="CSS/newTask.css">
+  <script src="https://kit.fontawesome.com/96c15e3f6d.js" crossorigin="anonymous"></script>
+  <title>Task Hub</title>
+</head>
+
+<body>
+
+<aside class="project_section">
+
+  <div class="header | flex_display">
+    <img src="Collaborativetaskboardimages/goal.png" alt="goal" width="100" height="100">
+    <h2>Projects</h2>
+  </div>
+
+  <ul class="projects">
+    <input type="text" placeholder="+ New Project" name="project_title">
+  </ul>
+
+</aside>
+
+<nav class="main_nav | flex_display">
+
+  <div class="Collaborative_Task | flex_display">
+    <img src="Collaborativetaskboardimages/collaborating-in-circle.png" alt="collaborating" width="150">
+    <h1>Collaborative Task Board</h1>
+  </div>
+
+  <div class="user_details | flex_display">
+    <i class="fa-solid fa-user"></i>
+    <h4></h4>
+  </div>
+
+</nav>
+
+<main class="main_task_board">
+</main>
+
+<aside class="contributor">
+
+  <h3 class="flex_display">Contributor</h3>
+
+  <ul class="flex_display">
+  </ul>
+
+  <div class="invit_people | flex_display">
+    <input type="text" name="userDetails" id="userDetails" placeholder="Search by email: or name:">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </div>
+
+</aside>
+
+<div class="taskFormdiv">
+
+  <div class="flex_display | taskheading ">New Task
+    <i class="fa-solid fa-xmark"></i>
+  </div>
+
+  <form class="taskForm">
+
+    <label for="task-title" class="flex_display | taskinput">
+      Task Title:
+      <input type="text" name="task-title" id="task-title" value="" placeholder="Title*" required>
+    </label>
+
+    <label for="assign-user" class="flex_display | taskinput">
+      Assign User to:
+      <select name="assign-user" id="assign-user">
+      </select>
+    </label>
+
+    <label for="progress" class="flex_display | taskinput">
+      Progress:
+      <input type="text" name="progress" id="progress" value="" placeholder="progress*"></ul>
+    </label>
+
+    <label for="due-date" class="flex_display | taskinput">
+      Complete By:
+      <input type="date" name="due-date" id="due-date" required>
+    </label>
+
+    <button>Create</button>
+  </form>
+
+</div>
+
+<script src="JS/collbrativeFun.js"></script>
+<script src="JS/projectsFun.js"></script>
+<script src="JS/TaskBoardFun.js"></script>
+<script src="JS/userInvite.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root{
+  --scrol-bl: #131314;
+  --scroll-lg-bl:#444746;
+  --bg-user-cl:#8881b3;
+  --shadow-black:rgba(0, 0, 0, 0.2);
+
+  --nav-bg-color:#121116;
+  --bg-bl:#010101;
+  --bg-lgt-bl:#121116;
+  --bg-inp:#6B60BC;
+  --bg-seleted:#181727;
+  --int-bl:#1F2022;
+  --txt-wt-color:#dad9d9;
+  --txt-lgt-wt-color:#A09DB0;
+  font-size: 0.9rem;
+}
+
+body{
+  font-family: "Roboto", sans-serif;
+  color: var(--txt-wt-color);
+  background-color: var(--bg-bl);
+  display: grid;
+  grid-template-columns: 1.5fr 6.5fr 2fr;
+  grid-template-rows: 1fr 9fr;
+  width: 100%;
+  height: 100vh;
+}
+
+.bodyadd{
+  position: relative;
+  .main_task_board,.main_nav,.project_section,.contributor{
+    filter: blur(5px);
+    cursor: none !important;
+    pointer-events: none;
+  }
+}
+
+input{
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  border:none;
+}
+
+input::placeholder{
+  color: var(--txt-wt-color);
+  font-weight: 600;
+}
+
+button{
+  color: inherit;
+  background-color: inherit;
+  border: none;
+}
+
+input:hover{
+  background-color: var(--scrol-bl);
+  box-shadow: 2px 2px 4px var(--shadow-black);
+}
+
+a{
+  text-decoration-line: none;
+  color: inherit;
+}
+
+li{
+  list-style-type: none;
+}
+
+input[type="text"] {
+  color: var(--txt-wt-color);
+}
+
+.flex_display{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:5px;
+}
+
+.user_circle{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: var(--bg-user-cl);
+}
+
+.main_task_board{
+  grid-column:2/3;
+  grid-row:2/3;
+  display: grid;
+  grid-area: 'main';
+  grid-template-columns: repeat(4,1fr);
+  grid-auto-rows: 1fr 10fr;
+  padding: 0 1.6rem;
+
+  overflow-y: scroll;
+  scrollbar-color: var(--scroll-lg-bl) var(--scrol-bl);
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+
+.main_nav{
+  grid-column:2/3;
+  grid-row:1/2;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px var(--shadow-black);
+  padding: 0.74rem;
+  background-color: var(--nav-bg-color);
+  border-radius: 0 3px;
+}
+
+.Collaborative_Task{
+  gap: 15px;
+}
+
+.Collaborative_Task>img{
+  width: 40px;
+}
+
+.assigned_to>ul>li>span{
+  justify-content: start;
+  font-size: 0.8rem;
+}
+
+.progress>ul>li{
+  justify-content: start;
+}
+
+.bigcard{
+  padding: 6px;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  position: relative;
+}
+
+.bigcard>div{
+  justify-content: flex-start;
+  position: sticky;
+  z-index:1;
+  background-color: var(--bg-bl);
+  top: -0.1%;
+  padding: 0.6rem 1rem;
+  padding-left: 1.2rem;
+}
+
+.bigcard>ul{
+ flex-direction: column;
+ gap: 12px;
+}
+
+.card{
+  font-weight: 400;
+  width: 160px;
+  height: 65px;
+  justify-content: start;
+  align-items: center;
+  padding: 0.3em 1em;
+  border-radius: 5px;
+  background-color: var(--bg-lgt-bl);
+  text-wrap: wrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+
+.cardvis{ 
+  z-index: 2;
+  overflow-y: visible;
+  height: fit-content;
+}
+
+
+.inputcard{
+  border: 2px solid var(--txt-wt-color);
+  color: var(--txt-wt-color);
+  background-color: var(--bg-lgt-bl);
+  text-wrap: wrap;
+}
+
+.due_date>ul>.card{
+  justify-content: space-evenly;
+}
+
+.fa-ellipsis-vertical{
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.due_date>ul>li{
+  position: relative;
+} 
+
+.more{
+  display: none;
+  gap: 6px;
+  font-size: 0.9rem;
+  background-color: var(--bg-bl);
+  padding: 0.4em;
+  border-radius: 5px;
+  position: absolute;
+  left: 15%;
+}
+
+.remove>i,.complete>i{
+ font-size: 0.8rem;
+ padding-right: 3px;
+}
+
+.remove:hover,.complete:hover{
+  cursor: pointer;
+  background-color: var(--bg-lgt-bl);
+}
+
+.more>div{
+  padding: 0.18em 0;
+  border-radius: 4px;
+}
+
+.newTask{
+  position: absolute;
+  background-color: var(--bg-inp);
+  border-radius: 5px;
+  padding: 0.8em 1em;
+  font-weight: 600;
+  text-wrap: nowrap;
+  right: -24px;
+  cursor: pointer;
+}

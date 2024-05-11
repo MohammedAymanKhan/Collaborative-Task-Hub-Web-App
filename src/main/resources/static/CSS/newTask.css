@@ -1,0 +1,75 @@
+.taskFormdiv{
+  display: none;
+
+  font-size: 1.2rem;
+
+  position: absolute;
+  top:15%;
+  left: 35%;
+
+  padding: 1.5rem;
+
+  width: 30%;
+
+  background-color: var(--nav-bg-color);
+  border-radius: 4px;
+
+  z-index: 10;
+  filter: blur(0) !important;
+}
+
+.taskFormdiv>.taskheading{
+  padding-bottom: 0.8rem;
+  justify-content: space-between;
+}
+
+.taskForm{
+  padding: 1.2rem;
+
+  font-size: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap:1rem;
+
+  justify-content: center;
+}
+
+.taskinput{
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.taskinput>input,.taskinput>select{
+  font-size: 1.1rem;
+  width: 100%;
+  padding: 0.4em;
+  border-radius: 4px;
+  background-color: var(--int-bl);
+  border: 2px solid #76757A;
+  color: var(--txt-wt-color);
+}
+
+.taskinput>input::placeholder{
+  font-size: 1rem;
+  color: #76757A;
+}
+
+.taskForm>button{
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: #918ACD;
+  border-radius: 4px;
+  padding: 0.3em;
+}
+
+.taskForm>button:hover{
+  background-color: #857dd0;
+  box-shadow: 2px 2px 4px var(--shadow-black);
+}
+
+.taskFormdiv>.taskheading>.fa-xmark{
+  cursor: pointer;
+}

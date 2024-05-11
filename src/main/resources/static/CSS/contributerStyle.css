@@ -1,0 +1,50 @@
+.contributor{
+  grid-column:3/4;
+  grid-row:1/3;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 8fr 1fr;
+  gap:4px;
+  background-color: var(--bg-bl);
+}
+
+.contributor>h3{
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 0.8em 0;
+  background-color: var(--nav-bg-color);
+  border-radius: 0 3px;
+}
+
+.contributor>ul{
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  font-size: 0.8rem;
+  font-weight: 500;
+  gap:10px;
+  padding: 1rem;
+
+  overflow-y: scroll;
+  scrollbar-color: var(--scroll-lg-bl) var(--scrol-bl);
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+
+.invit_people{
+  color: var(--txt-wt-color);
+  background-color: var(--bg-lgt-bl);
+  border-radius: 3px 0;
+}
+
+.invit_people>input{
+  width: 80%;
+  border-radius: 0;
+  margin-left: 2px;
+  background-color: var(--bg-color-hd);
+  box-shadow: none;
+}
+
+.invit_people>i{
+  font-size: 1.3rem;
+}
