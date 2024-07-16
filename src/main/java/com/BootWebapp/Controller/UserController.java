@@ -1,5 +1,7 @@
 package com.BootWebapp.Controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,15 +17,16 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/user")
 public class UserController {
 	
-	UserRepository userRep;
+	private final UserRepository userRep;
 
 	@Autowired
-	public void setUserRep(UserRepository userRep) {
+	public UserController(UserRepository userRep) {
 		this.userRep = userRep;
 	}
 	
 	@PostMapping(path = "/login")
-	public String login(@ModelAttribute User user, BindingResult bindingResult, HttpSession session) {
+	public String login(@ModelAttribute User user, BindingResult bindingResult, HttpSession session,
+						HttpServletResponse response) {
 
 		boolean flag=false;
 
@@ -31,8 +34,16 @@ public class UserController {
 			flag=userRep.userExists(user.getEmail());
 
 		if(flag) {
+
 			session.setAttribute("user", user);
+
+			Cookie userCookie = new Cookie("email", user.getEmail());
+			userCookie.setPath("/");
+			userCookie.setSecure(true);
+			response.addCookie(userCookie);
+
 			return "redirect:/TaskHub.html";
+
 		}
 
 		return "redirect:/index.html";

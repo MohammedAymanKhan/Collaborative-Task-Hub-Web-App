@@ -1,4 +1,5 @@
 .contributor{
+  font-family: var(--font-family-chat);
   grid-column:3/4;
   grid-row:1/3;
   display: grid;
@@ -20,7 +21,7 @@
   flex-direction: column;
   justify-content: start;
   align-items: start;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 500;
   gap:10px;
   padding: 1rem;
@@ -31,20 +32,111 @@
   scroll-behavior: smooth;
 }
 
-.invit_people{
+.message{
+  width: 100%;
+  justify-content: start;
+  gap: 6px;
+}
+
+.text-msg{
+  width: 100%;
+  flex-basis: 5;
+}
+
+.contributor>ul>li{
+
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgb(176, 173, 173);
+
+}
+
+.msg_user{
+
+  font-size: 0.8rem;
+  width: 28px;
+  aspect-ratio: 1/1;
+  text-align: center;
+  border-radius: 20px;
+  background-color: var(--bg-user-cl);
+  color: black;
+
+}
+
+.message_By_Me{
+
+  text-align: right;
+  cursor: pointer;
+}
+
+.message_By_Me:hover{
+
+  .msg_upDel{
+    display: flex;
+  }
+
+}
+
+.msg_upDel{
+  display: none;
+  font-size: 0.8em;
+  align-self:flex-end;
+  gap:10px;
+}
+
+.msg_upDel>.fa-pen:active,.msg_upDel>.fa-trash:active{
+  cursor: pointer;
+  transform: scale(0.8);
+}
+
+
+
+.sendMessages{
   color: var(--txt-wt-color);
   background-color: var(--bg-lgt-bl);
   border-radius: 3px 0;
+  gap: 4px;
 }
 
-.invit_people>input{
-  width: 80%;
+#sendMessagesInput{
+  width: 70%;
+  height: 80%;
   border-radius: 0;
   margin-left: 2px;
   background-color: var(--bg-color-hd);
   box-shadow: none;
+  padding: 0 0.6em;
 }
 
-.invit_people>i{
-  font-size: 1.3rem;
+.sendimg{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 16%;
+  height: 60%;
+
+  background-color: #030303;
+  border-radius: 35%;
+  cursor: not-allowed;
+}
+
+.canSendMsg{
+  cursor: pointer;
+}
+.canSendMsg:active{
+  transform: scale(0.8);
+}
+
+.sendimg>img{
+  height: 60%;
+  width: 60%;
+}
+
+#chatMsgInput{
+
+  background-color: var(--bg-lgt-bl);
+  text-wrap: wrap;
+  height: 32px;
+  border-radius: 4px;
+
 }

@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=LXGW+WenKai+TC&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=LXGW+WenKai+TC&family=Noto+Sans+KR:wght@100..900&display=swap');
 
 *{
   padding: 0;
@@ -20,11 +22,15 @@
   --int-bl:#1F2022;
   --txt-wt-color:#dad9d9;
   --txt-lgt-wt-color:#A09DB0;
+--font-family-main-content: "Noto Sans KR","LXGW WenKai TC",sans-serif,cursive;
+--font-family-chat: "LXGW WenKai TC",sans-serif,cursive;
+
   font-size: 0.9rem;
 }
 
 body{
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font-family-main-content);
+  font-weight: 400;
   color: var(--txt-wt-color);
   background-color: var(--bg-bl);
   display: grid;
@@ -106,6 +112,8 @@ input[type="text"] {
   scrollbar-color: var(--scroll-lg-bl) var(--scrol-bl);
   scrollbar-width: thin;
   scroll-behavior: smooth;
+
+  padding: 0 2rem;
 }
 
 .main_nav{
@@ -127,55 +135,67 @@ input[type="text"] {
 }
 
 .assigned_to>ul>li>span{
-  justify-content: start;
   font-size: 0.8rem;
 }
 
-.progress>ul>li{
-  justify-content: start;
-}
 
 .bigcard{
-  padding: 6px;
+  padding: 0.6rem;
   display: grid;
   align-content: start;
   gap: 14px;
   position: relative;
+  width: fit-content;
 }
 
 .bigcard>div{
   justify-content: flex-start;
   position: sticky;
-  z-index:1;
+  z-index: 3;
   background-color: var(--bg-bl);
   top: -0.1%;
-  padding: 0.6rem 1rem;
-  padding-left: 1.2rem;
+  padding: 0.7em 2px;
 }
 
 .bigcard>ul{
  flex-direction: column;
- gap: 12px;
+ gap: 16px;
+ width: fit-content;
 }
 
 .card{
+  font-size: 0.9rem;
   font-weight: 400;
-  width: 160px;
+  width: 150px;
   height: 65px;
   justify-content: start;
   align-items: center;
-  padding: 0.3em 1em;
+  padding: 0.3em 0.6em;
   border-radius: 5px;
   background-color: var(--bg-lgt-bl);
   text-wrap: wrap;
-  overflow:hidden;
-  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.cardvis{ 
+.progress>ul>li{
+  width: 153px;
+  height: 66px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.progress>ul>li>div{
+  position: absolute;
+}
+
+
+.progress>ul>li>.card:hover{
   z-index: 2;
   overflow-y: visible;
+  min-height: 65px;
   height: fit-content;
+
+  text-align: start;
 }
 
 
@@ -197,7 +217,7 @@ input[type="text"] {
 
 .due_date>ul>li{
   position: relative;
-} 
+}
 
 .more{
   display: none;
@@ -229,9 +249,80 @@ input[type="text"] {
   position: absolute;
   background-color: var(--bg-inp);
   border-radius: 5px;
-  padding: 0.8em 1em;
+  padding: 0.5em 0.6em;
   font-weight: 600;
   text-wrap: nowrap;
   right: -24px;
   cursor: pointer;
+}
+
+
+.error{
+
+  display: none;
+  position: absolute;
+
+  background-color: #eb3d3d;
+  right: 22%;
+  top: 11%;
+  z-index: 5;
+
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  padding: 0.4rem 0.2rem;
+  width: 160px;
+  border-radius: 6px;
+
+  animation-name: error-display;
+  animation-timing-function: ease;
+  animation-delay: 2s;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+.error-img,.error-img>img{
+  width: 44px;
+  height: 44px;
+}
+
+.error-message{
+  font-size: 0.9rem;
+  flex-basis: 100%;
+  font-weight: 480;
+  color: #F6FFFE;
+}
+
+@keyframes error-display {
+  10%   {
+    top: 9%;
+  }
+  20%  {
+    top: 7%;
+  }
+  30%  {
+    top: 6%;
+  }
+  40%  {
+    top: 5%;
+  }
+  50% {
+    top: 4%;
+  }
+  60% {
+    top: 3%;
+  }
+  70% {
+    top: 2%;
+  }
+  80% {
+    top: -2%;
+  }
+  90%{
+    top: -4%;
+  }
+  100% {
+    top: -6%;
+  }
+
 }

@@ -3,6 +3,7 @@ package com.BootWebapp.Services;
 import com.BootWebapp.DAO.ProjectReportDAO;
 import com.BootWebapp.Model.ProjectReport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -10,22 +11,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+
 @Service
 public class ProjectReportServices {
 
-    private ProjectReportDAO projRepDao;
-    private Set<String> updateOpProjDetailID=new HashSet<>();
+    private final ProjectReportDAO projRepDao;
+    private static final Set<String> updateOpProjDetailID = new HashSet<>();
 
     @Autowired
-    public void setProjRepDao(ProjectReportDAO projRepDao) {
+    public ProjectReportServices(ProjectReportDAO projRepDao) {
         this.projRepDao = projRepDao;
     }
 
-    public ProjectReport addProjectDetails(ProjectReport projRep, Integer pid) throws DataAccessException {
+    public Boolean addProjectDetails(ProjectReport projRep, Integer pid) throws DataAccessException {
 
         int row=projRepDao.addProjReport(projRep,pid);
-        if(row==1) return projRep;
-        else return null;
+        return row==1;
 
     }
 

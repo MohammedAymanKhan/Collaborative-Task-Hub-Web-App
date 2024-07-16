@@ -49,12 +49,14 @@
 
   <h3 class="flex_display">Contributor</h3>
 
-  <ul class="flex_display">
+  <ul class="flex_display | msgBox">
   </ul>
 
-  <div class="invit_people | flex_display">
-    <input type="text" name="userDetails" id="userDetails" placeholder="Search by email: or name:">
-    <i class="fa-solid fa-magnifying-glass"></i>
+  <div class="sendMessages | flex_display">
+    <input type="text" name="sendMessagesInput" id="sendMessagesInput" placeholder="Type a message..." value="">
+    <div class="sendimg ">
+      <img src="Collaborativetaskboardimages/send.png" alt="send" width="25" height="25">
+    </div>
   </div>
 
 </aside>
@@ -93,10 +95,24 @@
 
 </div>
 
+<div class="error">
+
+  <div class="error-img">
+    <img src="Collaborativetaskboardimages/error.png" alt="error-img" width="40" height="40">
+  </div>
+
+  <div class="error-message">
+    Internall server error
+  </div>
+
+</div>
+
+<script src="JS/WebScoketConnectionProjectDetails.js"></script>
 <script src="JS/collbrativeFun.js"></script>
 <script src="JS/projectsFun.js"></script>
 <script src="JS/TaskBoardFun.js"></script>
-<script src="JS/userInvite.js"></script>
+<!--<script src="JS/userInvite.js"></script>-->
+<script src="JS/chatMessages.js"></script>
 
 </body>
 

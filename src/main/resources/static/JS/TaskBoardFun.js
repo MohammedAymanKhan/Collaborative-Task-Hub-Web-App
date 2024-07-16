@@ -1,46 +1,6 @@
 let SeletedProjectId;
 let options=[];
 
-//RETRIEVE(READ) Project Report details
-function getProjectDetails(projectID){
-  fetch(`/projectReport/projectDetails/${projectID}`,
-  {
-      method: 'GET',
-      headers: {
-      'Content-Type': 'application/json'
-      }
-  }).then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }else if(response.status===404){
-        showErrorMesgNotFoun();
-      }else if(response.status===500){
-        showServerError();
-      }else{
-        return response.json();
-      }
-  }).then(projectsDetailsData => {
-    options=[];
-    document.querySelector('.tasks > ul').innerHTML='';
-    document.querySelector('.assigned_to > ul').innerHTML='';
-    document.querySelector('.progress > ul').innerHTML='';
-    document.querySelector('.due_date > ul').innerHTML='';
-    document.querySelector('.contributor>ul').innerHTML='';
-    document.querySelector('.taskForm #assign-user').innerHTML='';
-    contributerDisplay(Object.values(projectsDetailsData));
-    displayProjectsDetailsData(Object.values(projectsDetailsData));
-  }).catch(error => {
-      console.error('Fetch error:', error);
-  });
-}
-
-function showServerError(){
-  alert("server error unable to fetch");
-}
-
-function showErrorMesgNotFoun(){
-  alert("Not able ")
-}
 
 //by DOM display
 function displayProjectsDetailsData(projectsDetailsDataArray) {
@@ -120,6 +80,7 @@ function createListItem(classes, id, column, content) {
 
 //helps in displaying formatted date
 function dateFormatted(date){
+
   let arrDate=date.split('-');
   switch(arrDate[1]){
     case '01': return arrDate[2]+'-Jan-'+arrDate[0];
@@ -137,37 +98,6 @@ function dateFormatted(date){
   }
 }
 
-
-/* event to task and progress,assign column li element to input element to UPDATE details*/
-async function updateProjDetails(projRepId,column,upVlaue){
-
-  let updateValue={
-    projRepId,
-    column,
-    upVlaue
-  };
-  console.log(updateValue);
-
-  return await fetch('/projectReport/update',
-
-    {	method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-    	},
-    	body: JSON.stringify(updateValue)
-    }
-    ).then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return true;
-    }).then(updated => {
-        return updated;
-    }).catch(error => {
-        return false;
-    });
-
-}
 
 function addEventListenerToCard(card){
 
@@ -207,81 +137,12 @@ function cardToInput(card){
 }
 
 function inputToCard(inputElement,liElement){
-  let flag=updateProjDetails(liElement.getAttribute('projRepId'),liElement.getAttribute('column'),inputElement.value);
-  flag.then((updated)=>{
-	  if(updated){
-      if(liElement.getAttribute('column')==='tasktittle'){
-        liElement.innerHTML=inputElement.value;
-      }else if(liElement.getAttribute('column')==='assign'){
-        liElement.innerHTML=`
-        <div class="user_circle orange_circle"></div>
-        <span>${inputElement.value}</span>
-        `;
-      }else{
-        liElement.innerHTML=`
-        <span>${inputElement.value}</span>
-        `;
-      }
-    }
-  });
+
+  updateProjDetails(liElement.getAttribute('projRepId'),liElement.getAttribute('column'),inputElement.value);
   inputElement.replaceWith(liElement);
-}
-
-
-//Event to CREATE new Project Report Details
-async function newProjDetails(){
-
-  const parentElement=document.querySelector('.tasks>ul');
-  const id=parentElement.querySelector(":nth-child("+(parentElement.children.length)+")")?.getAttribute('projRepId');
-  const ProjRepID= id!=null ? (Number(id)+0.1).toFixed(2) : (Number(SeletedProjectId)+0.1).toFixed(2);
-
-  let taskValue=document.querySelector('.taskForm #task-title');
-  let assignValue=document.querySelector('.taskForm #assign-user');
-  let progressValue=document.querySelector('.taskForm #progress');
-  let dueDateValue=document.querySelector('.taskForm #due-date');
-
-  const ProjectReport={
-    'projRepID':ProjRepID,
-    'taskTittle':taskValue.value,
-    'assign':assignValue.value,
-    'progress':progressValue.value,
-    'dueDate':dueDateValue.value
-  };
-  console.log(ProjectReport);
-  console.log(SeletedProjectId);
-  if(taskValue.value&&assignValue.value&&progressValue.value&&dueDateValue.value){
-
- 	taskValue.value='';
-    assignValue.value='';
-    progressValue.value='';
-    dueDateValue.value='';
-    await fetch('/projectReport/insert',
-
-      {	method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(ProjectReport)
-      }
-      ).then(response => {
-        if (response.status===201) {
-          return response.json();
-        }else{
-          throw new Error('Network response was not ok');
-        }
-      }).then(projectsDetailsData => {
-        console.log(projectsDetailsData);
-        contributerDisplay(Object.values(projectsDetailsData));
-        displayProjectsDetailsData(Object.values(projectsDetailsData));
-      }).catch(error => {
-          console.error('Fetch error:', error);
-      });
-
-  }else{
-    alert("Enter the Data in All Input Field");
-  }
 
 }
+
 
 function addNewTask(){
   document.querySelector('.taskForm button')
@@ -303,43 +164,11 @@ function addNewTask(){
           });
 }
 
-
-//DELETE particular Project Report Details
-async function deleteBackendCall(ProjReportDelete){
-
-  return await fetch('/projectReport/deleteProjRep',
-    {
-      method: 'DELETE',
-      headers: {
-      	'Content-Type': 'application/json'
-       },
-      body:JSON.stringify(ProjReportDelete.getAttribute('projRepId'))
-    }).then(response => {
-        if (!response.ok) {
-          return false;
-        }else{
-          return true;
-        }
-    }).then( success=> {
-      return success;
-    }).catch(fails => {
-      return fails;
-    });
-}
-
+// adding delete Event Listener
 function deleteAddEventLister(deleteItem) {
-  deleteItem.addEventListener('click',()=>{
-    const flag=deleteBackendCall(deleteItem.parentElement.parentElement);
-   	flag.then(deleted=>{
-		  if(deleted){
-        const proRepId=deleteItem.parentElement.parentElement.getAttribute('projRepId');
-        const elementsWithProjRepId = document.querySelectorAll(`[projrepid="${proRepId}"]`);
-        elementsWithProjRepId.forEach(element => {
-            element.remove();
-        });
-      }
-	  });
-  });
+    deleteItem.addEventListener('click',()=>{
+      deleteBackendCall(deleteItem.parentElement.parentElement);
+    });
 }
 
 
@@ -355,7 +184,6 @@ function moreFun(more){
   });
 
 }
-
 
 //completed Task
 function completeEvent(completeEle){

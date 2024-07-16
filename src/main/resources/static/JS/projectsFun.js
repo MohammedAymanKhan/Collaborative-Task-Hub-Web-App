@@ -1,4 +1,6 @@
 getProjects();
+let userName;
+const sendImg=document.querySelector('.sendimg');
 
 //Retrieve Operation
 function getProjects(){
@@ -16,6 +18,7 @@ function getProjects(){
         return response.json();
       }
     }).then(data => {
+      userName=data.userName;
       displayUserName(data.userName);
       displayProjects(Object.values(data.projects));
     }).catch(error => {
@@ -113,12 +116,16 @@ function addEventListenerToProjects(project){
 function selecteProject(project){
   getProjectDetails(SeletedProjectId);
   project.classList.add("selectedproject");
+   sendImg.classList.add('canSendMsg');
+  sendImg.addEventListener('click',sendContributerMessages);
 }
 
 function removeSelectedProject(project){
   if(project.classList.contains("selectedproject")){
     project.classList.remove("selectedproject");
   }
+   sendImg.classList.remove('canSendMsg');
+   sendImg.removeEventListener('click',sendContributerMessages);
 }
 
 //created new Project

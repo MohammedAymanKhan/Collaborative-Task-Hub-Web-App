@@ -11,27 +11,27 @@ import java.util.List;
 @Repository
 public class UserRepository {
 
-	private static final String insert="INSERT INTO User VALUES(?,?,?);";
-	private static final String selectByName = "SELECT * FROM USER WHERE name = ?";
-	private static final String selectByEmail = "SELECT name,email FROM user WHERE email = ?";
+	private static final String NEWUSER = "INSERT INTO User VALUES(?,?,?);";
+	private static final String USERBYNAME = "SELECT * FROM USER WHERE name = ?";
+	private static final String USERBYEMAIL = "SELECT name,email FROM user WHERE email = ?";
 
-	private JdbcTemplate userConn;
+	private final JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public void setUserConn(JdbcTemplate userConn) {
-		this.userConn = userConn;
+	public UserRepository(JdbcTemplate jdbcTemplate){
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public boolean addUser(User user) {
 
-		int row=userConn.update(insert,user.getName(),user.getEmail(),user.getPassword());
+		int row=jdbcTemplate.update(NEWUSER,user.getName(),user.getEmail(),user.getPassword());
 		return row==1;
 
 	}
 	
 	public boolean userExists(String email) {
 
-		User user=userConn.query(selectByEmail,(res)->{
+		User user=jdbcTemplate.query(USERBYEMAIL,(res)->{
 			if(res.next()){
 				return new User(res.getString("name"),res.getString("email"));
 			}else{
@@ -46,7 +46,7 @@ public class UserRepository {
 
 		try {
 
-            return userConn.queryForObject(selectByEmail, (res, rowNum)->
+            return jdbcTemplate.queryForObject(USERBYEMAIL, (res, rowNum)->
 					new User(res.getString("name"),res.getString("email")), email);
 
 		}catch(DataAccessException e){
@@ -59,7 +59,7 @@ public class UserRepository {
 
 		try{
 
-			return userConn.query(selectByName, (rs,rowNum)->
+			return jdbcTemplate.query(USERBYNAME, (rs,rowNum)->
 				 new User(rs.getString("name"), rs.getString("email")), name);
 
 		} catch (DataAccessException e) {
