@@ -20,25 +20,22 @@ import static com.BootWebapp.Model.Message.convertBackToNormalMsgId;
 @Repository
 public class MessageDAO {
 
-    private static final String NEWMSG = "INSERT INTO messages(msgId,message) VALUES(?,?)";
-    private static final String NEWMSGREL = "INSERT INTO chatsRelation(msgId,projId,senderEmail,receiverEmail) " +
+    private static final String NEW_MSG = "INSERT INTO messages(msgId,message) VALUES(?,?)";
+    private static final String NEW_MSG_REL = "INSERT INTO chatsRelation(msgId,projId,sender_id,receiver_id) " +
             "VALUES(?,?,?,?)";
-    private static final String UPADTEMSG = "UPDATE messages SET message=? WHERE msgId=?";
-    private static final String DELETEMSG = "DELETE FROM messages WHERE msgId=?";
-    private static final String DELETEMSGREL = "DELETE FROM chatsrelation WHERE msgId=?";
-    private static final String MSGSENDEREMAIL = "SELECT senderEmail FROM chatsrelation WHERE msgId = ? ";
-    private static final String GETMESSAGES = "SELECT m.msgId,message, " +
-            "CASE WHEN u.email = ? " +
-            "THEN 'me' " +
-            "ELSE name " +
-            "END AS name "+
-            "FROM messages m " +
-            "INNER JOIN chatsrelation c ON " +
-            "m.msgId=c.msgId " +
-            "INNER JOIN user u ON " +
-            "u.email=c.senderEmail " +
-            "WHERE projId=? " +
-            "ORDER BY CAST(SUBSTRING_INDEX(m.msgId, '.', -1) AS UNSIGNED)";
+    private static final String UPADTE_MSG = "UPDATE messages SET message=? WHERE msgId=?";
+    private static final String DELETE_MSG = "DELETE FROM messages WHERE msgId=?";
+    private static final String DELETE_MSG_REL = "DELETE FROM chatsrelation WHERE msgId=?";
+    private static final String MSG_SENDER_ID = "SELECT sender_id FROM chatsrelation WHERE msgId = ? ";
+    private static final String GET_MESSAGES = "SELECT m.msgId,m.message," +
+            " CASE WHEN u.user_id = ? THEN 'me' " +
+            " ELSE CONCAT(u.first_name, ' ', u.last_name) " +
+            " END AS name " +
+            " FROM messages m " +
+            " INNER JOIN chatsrelation c ON m.msgId = c.msgId " +
+            " INNER JOIN users u ON u.user_id = c.sender_id " +
+            " WHERE c.projId = ? " +
+            " ORDER BY CAST(SUBSTRING_INDEX(m.msgId, '.', -1) AS UNSIGNED);";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -50,12 +47,12 @@ public class MessageDAO {
         this.transactionTemplate = transactionTemplate;
     }
 
-    public String getSenderEmail(String msgId){
+    public int getUserId(String msgId){
 
-        return jdbcTemplate.query(MSGSENDEREMAIL ,(ResultSet rs)->{
+        return jdbcTemplate.query(MSG_SENDER_ID ,(ResultSet rs)->{
 
             if(rs.next()){
-                return rs.getString("senderEmail");
+                return rs.getInt("sender_id");
             }else {
                 return null;
             }
@@ -64,9 +61,9 @@ public class MessageDAO {
 
     }
 
-    public List<Message> getMessages(String email,Integer pId){
+    public List<Message> getMessages(Integer user_Id,Integer pId){
 
-        List<Message> messageList=jdbcTemplate.query(GETMESSAGES ,
+        List<Message> messageList=jdbcTemplate.query(GET_MESSAGES ,
             (ResultSet rs, int rowNum)->{
 
                 return new Message(
@@ -76,7 +73,7 @@ public class MessageDAO {
                     rs.getString("message"),
                     rs.getString("name"));
 
-            } ,email ,pId);
+            } ,user_Id ,pId);
 
         return messageList;
 
@@ -88,8 +85,8 @@ public class MessageDAO {
 
             try {
 
-                jdbcTemplate.update(NEWMSG ,message.getMsgId() ,message.getMessageText());
-                jdbcTemplate.update(NEWMSGREL ,message.getMsgId() ,pId ,message.getSender(),
+                jdbcTemplate.update(NEW_MSG ,message.getMsgId() ,message.getMessageText());
+                jdbcTemplate.update(NEW_MSG_REL ,message.getMsgId() ,pId ,message.getSender(),
                         message.getReceiver());
 
                 return true;
@@ -106,7 +103,7 @@ public class MessageDAO {
 
     public int update(Message message){
 
-        return jdbcTemplate.update(UPADTEMSG ,message.getMessageText() ,message.getMsgId());
+        return jdbcTemplate.update(UPADTE_MSG ,message.getMessageText() ,message.getMsgId());
 
     }
 
@@ -116,8 +113,8 @@ public class MessageDAO {
 
             try {
 
-                jdbcTemplate.update(DELETEMSGREL ,msgId);
-                jdbcTemplate.update(DELETEMSG ,msgId);
+                jdbcTemplate.update(DELETE_MSG_REL ,msgId);
+                jdbcTemplate.update(DELETE_MSG ,msgId);
                 return true;
 
             }catch (DataAccessException e){

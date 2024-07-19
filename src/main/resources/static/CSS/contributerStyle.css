@@ -18,18 +18,17 @@
 }
 
 .contributor>ul{
+  font-size: 0.8rem;
+
   flex-direction: column;
   justify-content: start;
   align-items: start;
-  font-size: 0.9rem;
+
   font-weight: 500;
   gap:10px;
   padding: 1rem;
 
-  overflow-y: scroll;
-  scrollbar-color: var(--scroll-lg-bl) var(--scrol-bl);
-  scrollbar-width: thin;
-  scroll-behavior: smooth;
+ overflow-y: scroll;
 }
 
 .message{
@@ -58,7 +57,7 @@
   text-align: center;
   border-radius: 20px;
   background-color: var(--bg-user-cl);
-  color: black;
+  color: #000000;
 
 }
 

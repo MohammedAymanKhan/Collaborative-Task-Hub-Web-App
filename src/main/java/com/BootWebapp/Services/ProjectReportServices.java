@@ -7,9 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -17,7 +15,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class ProjectReportServices {
 
     private final ProjectReportDAO projRepDao;
-    private static final Set<String> updateOpProjDetailID = new HashSet<>();
+    private static final Map<String,String> currentUpdateOnColumn = new HashMap<>();
 
     @Autowired
     public ProjectReportServices(ProjectReportDAO projRepDao) {
@@ -26,18 +24,20 @@ public class ProjectReportServices {
 
     public Boolean addProjectDetails(ProjectReport projRep, Integer pid) throws DataAccessException {
 
-        int row=projRepDao.addProjReport(projRep,pid);
-        return row==1;
+        int row = projRepDao.addProjReport(projRep,pid);
+        return row == 1;
 
     }
 
     public Boolean updateProjDetails(String pRid,String column,String value) throws DataAccessException {
 
-        while(updateOpProjDetailID.contains(pRid));
+        while (currentUpdateOnColumn.containsKey(pRid) && currentUpdateOnColumn.get(pRid).equals(column))
 
-        updateOpProjDetailID.add(pRid);
+        currentUpdateOnColumn.put(pRid,column);
+
         int row=projRepDao.updateProjReport(Float.parseFloat(pRid),column,value);
-        updateOpProjDetailID.remove(pRid);
+
+        currentUpdateOnColumn.remove(pRid);
 
         return row==1;
 

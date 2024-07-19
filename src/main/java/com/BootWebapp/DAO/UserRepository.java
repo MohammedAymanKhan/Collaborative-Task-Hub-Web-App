@@ -6,14 +6,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.BootWebapp.Model.User;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
 public class UserRepository {
 
-	private static final String NEWUSER = "INSERT INTO User VALUES(?,?,?);";
-	private static final String USERBYNAME = "SELECT * FROM USER WHERE name = ?";
-	private static final String USERBYEMAIL = "SELECT name,email FROM user WHERE email = ?";
+	private static final String NEW_USER = "INSERT INTO users('email', 'password', 'first_name', 'last_name') VALUES(?,?,?,?)";
+	private static final String USER_BY_EMAIL = "SELECT user_id, first_name, last_name, email FROM users WHERE email = ?";
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -24,49 +26,28 @@ public class UserRepository {
 
 	public boolean addUser(User user) {
 
-		int row=jdbcTemplate.update(NEWUSER,user.getName(),user.getEmail(),user.getPassword());
+		int row=jdbcTemplate.update(NEW_USER,user.getEmail(),
+											user.getPassword(),
+											user.getFirst_name(),
+											user.getLast_name());
 		return row==1;
 
 	}
 	
-	public boolean userExists(String email) {
+	public User userExistsByEmail(String email) {
 
-		User user=jdbcTemplate.query(USERBYEMAIL,(res)->{
+		User user=jdbcTemplate.query(USER_BY_EMAIL,(res)->{
 			if(res.next()){
-				return new User(res.getString("name"),res.getString("email"));
+				return new User(res.getInt("user_id"),
+								res.getString("first_name"),
+								res.getString("last_name"),
+								res.getString("email"));
 			}else{
 				return null;
 			}
 		},email);
 
-		return user!=null;
-	}
-
-	public User getUserByEmail(String email){
-
-		try {
-
-            return jdbcTemplate.queryForObject(USERBYEMAIL, (res, rowNum)->
-					new User(res.getString("name"),res.getString("email")), email);
-
-		}catch(DataAccessException e){
-			return null;
-		}
-
-    }
-
-	public List<User> getUserByName(String name){
-
-		try{
-
-			return jdbcTemplate.query(USERBYNAME, (rs,rowNum)->
-				 new User(rs.getString("name"), rs.getString("email")), name);
-
-		} catch (DataAccessException e) {
-			System.out.println("Error executing query: " + e.getMessage());
-			return null;
-		}
-
+		return user;
 	}
 
 }

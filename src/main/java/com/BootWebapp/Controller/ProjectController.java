@@ -31,11 +31,10 @@ public class ProjectController {
 
 		Map<String,Object> map = new HashMap<>();
 
-		List<Project> projects = null;
-		projects=projRep.getProjects(user.getEmail());
+		List<Project> projects = projRep.getProjects(user.getUser_id());
 
 		if(projects!=null) {
-			map.put("userName", user.getName());
+			map.put("userName", user.getFirst_name()+" "+user.getLast_name());
 			map.put("projects", projects);
 			return map;
 		}
@@ -44,13 +43,14 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/addProject")
-	public  Project createNewProject(@RequestBody Project project,@SessionAttribute User user) {
+	public  List<Project> createNewProject(@RequestBody Project project, @SessionAttribute User user) {
 
-		project.setCratedByEmail(user.getEmail());
-		Boolean flag=projRep.addProject(project);
+		project.setCratedBy(user.getUser_id());
 
-		if(flag) return project;
-		return null;
+		boolean flag = projRep.addProject(project);
+		project.setCratedBy(null);
+
+		return flag ? List.of(project) : null;
 
 	}
 

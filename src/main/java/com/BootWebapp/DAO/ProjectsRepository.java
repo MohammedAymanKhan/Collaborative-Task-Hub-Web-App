@@ -1,25 +1,29 @@
 package com.BootWebapp.DAO;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import com.BootWebapp.Model.Project;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class ProjectsRepository{
 
-	private static final String NEWPROJECT = "insert into projects(projName,createdBy) values(?,?)";
-	private static final String DELETEPROJECT = "Delete from projects where projId=?";
-	private static final String UPDATEPROJECT = "Update projects Set projName=? where projId=?";
-	private static final String GETPROJECTS = "SELECT p.projId, p.projName FROM projects AS p"
+	private static final String NEW_PROJECT = " INSERT INTO projects(projName , createdBy) VALUES(?,?) ";
+	private static final String DELETE_PROJECT = "Delete from projects where projId=?";
+	private static final String UPDATE_PROJECT = "Update projects Set projName=? where projId=?";
+	private static final String GET_PROJECTS = "SELECT p.projId, p.projName FROM projects AS p"
 			+ " INNER JOIN workson AS w ON p.projId = w.projid"
-			+ " WHERE  w.email =?"
+			+ " WHERE  w.user_id =?"
 			+ " UNION"
 			+ " SELECT p.projId, p.projName"
 			+ " FROM projects AS p"
-			+ " WHERE p.createdBy=?;";
+			+ " WHERE p.createdBy=?";
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -28,35 +32,46 @@ public class ProjectsRepository{
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public Boolean addProject(Project project) {
+	@Transactional
+	public boolean addProject(Project project) {
 
-		int row=jdbcTemplate.update(NEWPROJECT,project.getProjName(),project.getCratedByEmail());
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+
+		int row = jdbcTemplate.update(connection -> {
+			PreparedStatement ps = connection.prepareStatement(NEW_PROJECT, new String[]{"projId"});
+			ps.setString(1, project.getProjName());
+			ps.setInt(2, project.getCratedBy());
+			return ps;
+		}, keyHolder);
+
+		project.setProjId(keyHolder.getKey().intValue());
+
 		return row==1;
 
 	}
 
 	public Boolean removeProject(Integer projId) {
 
-		int row=jdbcTemplate.update(DELETEPROJECT,projId);
+		int row=jdbcTemplate.update(DELETE_PROJECT,projId);
 		return row==1;
 
 	}
 
 	public Boolean updateProject(Project project) {
 
-		int row=jdbcTemplate.update(UPDATEPROJECT,project.getProjName(),project.getProjId());
+		int row=jdbcTemplate.update(UPDATE_PROJECT,project.getProjName(),project.getProjId());
 		return row==1;
 
 	}
 
-	public List<Project> getProjects(String email){
+	public List<Project> getProjects(int user_id){
 
-		return jdbcTemplate.query(GETPROJECTS ,(rs, rowNum) ->
+		return jdbcTemplate.query(GET_PROJECTS ,(rs, rowNum) ->
 			new Project(
 				rs.getInt("projId") ,
 				rs.getString("projName")
 			)
-			,email ,email
+			,user_id ,user_id
 		);
 
 	}	

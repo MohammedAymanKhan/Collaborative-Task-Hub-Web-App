@@ -17,8 +17,8 @@ public class MessagesServices {
         this.messageDAO = messageDAO;
     }
 
-    public List<Message> getMessages(String email,Integer pId){
-        return messageDAO.getMessages(email,pId);
+    public List<Message> getMessages(int user_id,Integer pId){
+        return messageDAO.getMessages(user_id,pId);
     }
 
     public boolean save(Message message,Integer pId){
@@ -33,12 +33,15 @@ public class MessagesServices {
     public boolean update(Message message){
 
         if(message.getMsgId()!=null){
-            String senderEmail = messageDAO.getSenderEmail(message.getMsgId());
-            if(message.getSender().equals(senderEmail)){
+
+            Integer userId = messageDAO.getUserId(message.getMsgId());
+
+            if(message.getSender() == userId){
                 return messageDAO.update(message)==1;
             }else {
                 return false;
             }
+
         }else{
             return false;
         }
@@ -48,12 +51,14 @@ public class MessagesServices {
     public boolean remove(Message message){
 
         if(message.getMsgId()!=null){
-            String senderEmail = messageDAO.getSenderEmail(message.getMsgId());
-            if(message.getSender().equals(senderEmail)){
+
+            Integer userId = messageDAO.getUserId(message.getMsgId());
+            if(message.getSender() == userId){
                 return messageDAO.delete(message.getMsgId());
             }else {
                 return false;
             }
+
         }else{
             return false;
         }

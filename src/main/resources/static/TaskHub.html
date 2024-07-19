@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="CSS/projectSectionBarStyle.css">
   <link rel="stylesheet" href="CSS/contributerStyle.css">
   <link rel="stylesheet" href="CSS/newTask.css">
+  <link rel="stylesheet" href="CSS/userIniviteSection.css">
   <script src="https://kit.fontawesome.com/96c15e3f6d.js" crossorigin="anonymous"></script>
   <title>Task Hub</title>
 </head>
@@ -22,7 +23,7 @@
     <h2>Projects</h2>
   </div>
 
-  <ul class="projects">
+  <ul class="projects | scroll_bar_style">
     <input type="text" placeholder="+ New Project" name="project_title">
   </ul>
 
@@ -42,14 +43,53 @@
 
 </nav>
 
-<main class="main_task_board">
+<main>
+  <section class="main_task_board">
+  </section>
+
+  <section class="user_inivite_section">
+
+    <div class="proj_selection_section">
+
+      <select name="proj_selection" id="proj_selection">
+        <option value="Web Development">Web Development</option>
+        <option value="Data Base">Data Base</option>
+        <option value="Back End">Back End</option>
+        <option value="DataBase Copy Web app">DataBase Copy Web app</option>
+      </select>
+
+    </div>
+
+    <section class="user_display_section | flex_display"></section>
+
+    <div class="search_user_by_deatils_section_ParentBox">
+
+      <div class="search_user_by_deatils_section">
+
+        <div id="search_user_by_deatils"
+             class="editable-div | custom-placeholder | scroll_bar_style"
+             role="textbox" aria-multiline="true"
+             custome-placeholder="Search byEmail: byTechStack: byName: ..."
+             contenteditable="true">
+        </div>
+
+        <div class="search_icon_img">
+          <img src="Collaborativetaskboardimages/icons-search.png" alt="search icon"  width="50">
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
 </main>
 
 <aside class="contributor">
 
   <h3 class="flex_display">Contributor</h3>
 
-  <ul class="flex_display | msgBox">
+  <ul class="flex_display | msgBox | scroll_bar_style">
   </ul>
 
   <div class="sendMessages | flex_display">
@@ -111,7 +151,7 @@
 <script src="JS/collbrativeFun.js"></script>
 <script src="JS/projectsFun.js"></script>
 <script src="JS/TaskBoardFun.js"></script>
-<!--<script src="JS/userInvite.js"></script>-->
+<script src="JS/userInvite.js"></script>
 <script src="JS/chatMessages.js"></script>
 
 </body>

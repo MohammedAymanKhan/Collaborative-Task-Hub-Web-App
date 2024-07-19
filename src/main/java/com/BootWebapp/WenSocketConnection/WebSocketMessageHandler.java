@@ -19,58 +19,58 @@ import java.util.Set;
 @Scope("prototype")
 public class WebSocketMessageHandler {
 
-    private ProjectReportController projRepController;
-    private MessagesController messagesController;
+    private final ProjectReportController projRepController;
+    private final MessagesController messagesController;
 
     private final Set<WebSocketSession> sessionSet = new HashSet<>();
-    private final WebSocketMessageHandler webSocketHandler;
-    public WebSocketMessageHandler() {
-        this.webSocketHandler=this;
-    }
 
     @Autowired
-    public void setProjRepController(ProjectReportController projRepController) {
+    public WebSocketMessageHandler(MessagesController messagesController, ProjectReportController projRepController) {
+        this.messagesController = messagesController;
         this.projRepController = projRepController;
     }
 
-    @Autowired
-    public void setMessagesController(MessagesController messagesController) {
-        this.messagesController = messagesController;
-    }
 
     public void dispatchMessages(RequestHeader header, String body, WebSocketSession session, Integer pId) throws IOException {
 
         /* to get all project Details and Messages of particular Project */
         if(header.getHeader().equals("/subscribe")){
-            projRepController.getProjectReport(webSocketHandler,session,pId);
-            messagesController.getMessages(pId,session,webSocketHandler);
+
+            projRepController.getProjectReport(this, session, pId);
+            messagesController.getMessages(pId, session,this);
+
         }else {
 
             /* For Project Details */
             switch (header.getHeader()) {
-                case "/insert":
-                    projRepController.insertNewProjReport(body, pId, webSocketHandler, session);
-                    break;
-                case "/update":
-                    projRepController.updateProjRep(body, webSocketHandler, session);
-                    break;
-                case "/delete":
-                    projRepController.deleteProjReport(body, webSocketHandler, session);
-                    break;
 
+                case "/insert":
+                    projRepController.insertNewProjReport(body, pId, this, session);
+                    return;
+
+                case "/update":
+                    projRepController.updateProjRep(body, this, session);
+                    return;
+
+                case "/delete":
+                    projRepController.deleteProjReport(body, this, session);
+                    return;
             }
 
             /* For Chat Messages */
             switch (header.getHeader()) {
+
                 case "/gotMsg":
-                    messagesController.saveMessage(body, pId, webSocketHandler, session);
-                    break;
+                    messagesController.saveMessage(body, pId, this, session);
+                    return;
+
                 case "/updateMessage":
-                    messagesController.updateMessage(body, pId, webSocketHandler, session);
-                    break;
+                    messagesController.updateMessage(body, pId, this, session);
+                    return;
+
                 case "/deleteMsg":
-                    messagesController.deleteMessage(body, pId, webSocketHandler, session);
-                    break;
+                    messagesController.deleteMessage(body, pId, this, session);
+                    return;
 
                 /* No Such Operation error message send back to client */
                 default:

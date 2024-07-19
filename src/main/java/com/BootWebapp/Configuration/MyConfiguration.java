@@ -12,5 +12,6 @@ public class MyConfiguration {
         ObjectMapper mapper = new ObjectMapper();
         return mapper;
     }
+
 }
 

@@ -15,7 +15,7 @@ public class ProjectReportDAO{
 
 	private static final String NEWPROJECTREPORET = "INSERT INTO projectreport VALUES(?,?,?,?,?,?)";
 	private static final String DELETEPROJECTREPORET = "DELETE FROM projectreport WHERE projRepID=?";
-	private static final String GETPROJECTREPORETS = "Select projRepID,taskTittle,assign,progress,dueDate FROM " +
+	private static final String GETPROJECTREPORETS = "SELECT projRepID,taskTittle,assign,progress,dueDate FROM " +
 			"projectreport WHERE projID=?";
 
 	private final JdbcTemplate jdbcTemplate;

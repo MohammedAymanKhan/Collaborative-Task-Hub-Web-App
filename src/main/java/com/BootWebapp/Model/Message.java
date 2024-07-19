@@ -7,8 +7,8 @@ public class Message {
 
     private String msgId;
     private String messageText;
-    private String sender;
-    private String receiver;
+    private Integer senderId;
+    private Integer receiverId;
     private String receiverName;
     private String senderName;
 
@@ -32,19 +32,19 @@ public class Message {
         this.senderName=senderName;
     }
 
-    public Message(String msgId, String messageText, String sender, String receiver) {
+    public Message(String msgId, String messageText, int senderId, int receiverId) {
         this.msgId = msgId;
         this.messageText = messageText;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
 
-    public Message(String msgId, String messageText, String sender, String receiver,
+    public Message(String msgId, String messageText, int senderId, int receiverId,
                    String receiverName, String senderName) {
         this.msgId = msgId;
         this.messageText = messageText;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
         this.receiverName = receiverName;
         this.senderName = senderName;
     }
@@ -65,20 +65,20 @@ public class Message {
         this.messageText = messageText;
     }
 
-    public String getSender() {
-        return sender;
+    public Integer getSender() {
+        return senderId;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setSender(int senderId) {
+        this.senderId = senderId;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public Integer getReceiver() {
+        return receiverId;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setReceiver(int receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getReceiverName() {
@@ -102,8 +102,8 @@ public class Message {
         return "Message{" +
                 "msgId='" + msgId + '\'' +
                 ", messageText='" + messageText + '\'' +
-                ", sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' +
+                ", sender='" + senderId + '\'' +
+                ", receiver='" + receiverId + '\'' +
                 ", receiverName='" + receiverName + '\'' +
                 ", senderName='" + senderName + '\'' +
                 '}';

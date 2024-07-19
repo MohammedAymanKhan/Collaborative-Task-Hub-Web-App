@@ -25,19 +25,17 @@ public class UserController {
 	}
 	
 	@PostMapping(path = "/login")
-	public String login(@ModelAttribute User user, BindingResult bindingResult, HttpSession session,
-						HttpServletResponse response) {
+	public String login(@ModelAttribute User user, BindingResult bindingResult, HttpSession session, HttpServletResponse response) {
 
-		boolean flag=false;
 
 		if(!bindingResult.hasErrors())
-			flag=userRep.userExists(user.getEmail());
+			user = userRep.userExistsByEmail(user.getEmail());
 
-		if(flag) {
+		if(user != null) {
 
 			session.setAttribute("user", user);
 
-			Cookie userCookie = new Cookie("email", user.getEmail());
+			Cookie userCookie = new Cookie("user_id", user.getUser_id().toString());
 			userCookie.setPath("/");
 			userCookie.setSecure(true);
 			response.addCookie(userCookie);

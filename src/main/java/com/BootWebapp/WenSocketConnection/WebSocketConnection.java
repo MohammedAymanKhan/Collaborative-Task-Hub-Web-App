@@ -41,10 +41,10 @@ public class WebSocketConnection extends AbstractWebSocketHandler {
         List<String> cookieHeaders = httpHeaders.get("Cookie");
 
         for (String str : cookieHeaders.get(0).split(";")) {
-            if(str.contains("email")) {
-                session.getAttributes().put("email",str.substring(7));
-                System.out.println(str.substring(7));
+            if(str.contains("user_id")) {
+                session.getAttributes().put("user_id",str.substring(9));
             }
+
         }
 
     }

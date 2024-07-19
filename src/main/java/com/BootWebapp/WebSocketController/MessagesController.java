@@ -38,13 +38,13 @@ public class MessagesController {
         try{
 
             Message message = converter.readValue(body,Message.class);
-            message.setSender((String) session.getAttributes().get("email"));
+            message.setSender(Integer.parseInt((String) session.getAttributes().get("user_id")));
             message.setMsgId(getFormattedMsgId(message.getMsgId(),pID));
 
             return message;
 
         } catch (JsonProcessingException e) {
-            System.out.println("error in converte method: "+e.getMessage());
+            System.out.println("error in convert method: "+e.getMessage());
             return null;
         }
 
@@ -54,9 +54,9 @@ public class MessagesController {
 
         try{
 
-            String email=(String) session.getAttributes().get("email");
+            int user_id = Integer.parseInt((String) session.getAttributes().get("user_id"));
 
-            List<Message> messageList=messagesServices.getMessages(email,pId);
+            List<Message> messageList = messagesServices.getMessages(user_id,pId);
 
             if (messageList!=null){
                 String body=converter.writeValueAsString(messageList);
@@ -76,7 +76,7 @@ public class MessagesController {
 
         try{
 
-            Message message=convertToObject(body,pID,session);
+            Message message = convertToObject(body,pID,session);
 
             boolean flag=messagesServices.save(message,pID);
 
@@ -102,9 +102,9 @@ public class MessagesController {
 
         try{
 
-            Message message=convertToObject(body,pID,session);
+            Message message = convertToObject(body,pID,session);
 
-            boolean flag=messagesServices.update(message);
+            boolean flag = messagesServices.update(message);
 
             if(flag){
                 String msgBody = "{ \"header\": \"updateMsgGot\", \"body\": " + body + "}";

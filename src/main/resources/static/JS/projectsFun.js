@@ -18,7 +18,7 @@ function getProjects(){
         return response.json();
       }
     }).then(data => {
-      userName=data.userName;
+      userName = data.userName;
       displayUserName(data.userName);
       displayProjects(Object.values(data.projects));
     }).catch(error => {
@@ -36,14 +36,14 @@ function displayProjects(projects){
   const projectList=document.querySelector('.projects');
   projects.forEach(proj=>{
     const liProjEle=document.createElement('li');
-    liProjEle.id=proj.projId;
-    liProjEle.textContent=proj.projName;
+    liProjEle.id = proj.projId;
+    liProjEle.textContent = proj.projName;
     projectList.insertBefore(liProjEle,projectList.lastElementChild);
     addEventListenerToProjects(liProjEle);
   });
 }
 
-//seleted and unSeleted functoniality 
+//selected and unSelected functionality
 function addEventListenerToProjects(project){
 
   project.addEventListener('click', () => {
@@ -52,61 +52,65 @@ function addEventListenerToProjects(project){
 
     if(project.id!=SeletedProjectId){
       if(!SeletedProjectId){
-              document.querySelector('main').innerHTML=`
-            <section class="tasks | bigcard">
+            document.querySelector('.main_task_board').style.display = 'grid';
+            document.querySelector('.user_inivite_section').style.display = 'none';
+            document.querySelector('.main_task_board').innerHTML=`
+                <section class="tasks | bigcard">
 
-              <div class="flex_display">
-                <i class="fa-solid fa-list-check"></i>
-                <h3>Task Name</h3>
-              </div>
+                  <div class="flex_display">
+                    <i class="fa-solid fa-list-check"></i>
+                    <h3>Task Name</h3>
+                  </div>
 
-              <ul class="flex_display">
-              </ul>
+                  <ul class="flex_display">
+                  </ul>
 
-            </section>
+                </section>
 
-            <section class="assigned_to | bigcard">
+                <section class="assigned_to | bigcard">
 
-              <div class="flex_display">
-                <i class="fa-solid fa-user-group"></i>
-                <h3>Assign</h3>
-              </div>
+                  <div class="flex_display">
+                    <i class="fa-solid fa-user-group"></i>
+                    <h3>Assign</h3>
+                  </div>
 
-              <ul class="flex_display">
-              </ul>
+                  <ul class="flex_display">
+                  </ul>
 
-            </section>
+                </section>
 
-            <section class="progress | bigcard">
+                <section class="progress | bigcard">
 
-              <div class="flex_display">
-                <i class="fa-solid fa-bars-progress"></i>
-                <h3>Progress</h3>
-              </div>
+                  <div class="flex_display">
+                    <i class="fa-solid fa-bars-progress"></i>
+                    <h3>Progress</h3>
+                  </div>
 
-              <ul class="flex_display">
-              </ul>
-            </section>
+                  <ul class="flex_display">
+                  </ul>
+                </section>
 
-            <section class="due_date | bigcard">
+                <section class="due_date | bigcard">
 
-              <div class="flex_display">
-                <i class="fa-regular fa-calendar"></i>
-                <h3>Due</h3>
-                <button class="newTask">+ New Task</button>
-              </div>
+                  <div class="flex_display">
+                    <i class="fa-regular fa-calendar"></i>
+                    <h3>Due</h3>
+                    <button class="newTask">+ New Task</button>
+                  </div>
 
-              <ul class="flex_display">
-              </ul>
+                  <ul class="flex_display">
+                  </ul>
 
-            </section>`;
+                </section>`;
             addNewTask();
             }
 	  SeletedProjectId=project.id;
       selecteProject(project);
     }else{
       SeletedProjectId='';
-      document.querySelector('main').innerHTML='';
+      msgBox.innerHTML = '';
+      document.querySelector('.main_task_board').style.display = 'none';
+      document.querySelector('.user_inivite_section').style.display = 'grid';
     }
 
   });
@@ -141,7 +145,7 @@ function addNewProject(projValue){
   if(projValue.value){
 
     const project={
-      'projName':projValue.value,
+      'projName' : projValue.value,
     };
     
     projValue.value='';
@@ -158,7 +162,7 @@ function addNewProject(projValue){
       }
       return response.json();
     }).then(projects => {
-      displayProjects(Object.values(projects));
+      displayProjects(projects);
     }).catch(error => {
       console.error('Fetch error:', error);
     });
