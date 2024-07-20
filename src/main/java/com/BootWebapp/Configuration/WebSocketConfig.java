@@ -1,6 +1,7 @@
 package com.BootWebapp.Configuration;
 
-import com.BootWebapp.WenSocketConnection.WebSocketConnection;
+import com.BootWebapp.WebSocketConnection.CustomHandshakeInterceptor;
+import com.BootWebapp.WebSocketConnection.WebSocketConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -11,12 +12,19 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
+    private final WebSocketConnection webSocketHandler;
+    private final CustomHandshakeInterceptor handshakeInterceptor;
+
     @Autowired
-    private WebSocketConnection webSocketHandler;
+    public WebSocketConfig(WebSocketConnection webSocketHandler,CustomHandshakeInterceptor handshakeInterceptor){
+        this.webSocketHandler = webSocketHandler;
+        this.handshakeInterceptor = handshakeInterceptor;
+    }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler, "/projectReports"); // Map the URL path
+        registry.addHandler(webSocketHandler, "/projectReports")
+                .addInterceptors(handshakeInterceptor);
     }
 
 }

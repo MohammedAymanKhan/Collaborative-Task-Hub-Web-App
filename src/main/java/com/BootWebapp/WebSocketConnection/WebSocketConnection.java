@@ -1,4 +1,4 @@
-package com.BootWebapp.WenSocketConnection;
+package com.BootWebapp.WebSocketConnection;
 
 import com.BootWebapp.Model.RequestHeader;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,16 +36,7 @@ public class WebSocketConnection extends AbstractWebSocketHandler {
 
     public void afterConnectionEstablished(WebSocketSession session) {
 
-        HttpHeaders httpHeaders = session.getHandshakeHeaders();
-
-        List<String> cookieHeaders = httpHeaders.get("Cookie");
-
-        for (String str : cookieHeaders.get(0).split(";")) {
-            if(str.contains("user_id")) {
-                session.getAttributes().put("user_id",str.substring(9));
-            }
-
-        }
+        System.out.println("WebSocket id: "+session.getAttributes().get("user_id"));
 
     }
 

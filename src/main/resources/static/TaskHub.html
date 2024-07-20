@@ -93,7 +93,12 @@
   </ul>
 
   <div class="sendMessages | flex_display">
-    <input type="text" name="sendMessagesInput" id="sendMessagesInput" placeholder="Type a message..." value="">
+    <div id="sendMessagesInput"
+         class="editable-div | custom-placeholder | scroll_bar_style | flex_display"
+         role="textbox" aria-multiline="true"
+         data-placeholder="Send message..."
+         contenteditable="true">
+    </div>
     <div class="sendimg ">
       <img src="Collaborativetaskboardimages/send.png" alt="send" width="25" height="25">
     </div>

@@ -19,8 +19,6 @@ public class ProjectReport {
 		this.dueDate = dueDate;
 	}
 
-
-
 	public String getProjRepID() {
 		return projRepID;
 	}

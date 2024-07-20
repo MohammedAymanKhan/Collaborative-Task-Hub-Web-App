@@ -3,7 +3,7 @@ package com.BootWebapp.WebSocketController;
 
 import com.BootWebapp.Model.Message;
 import com.BootWebapp.Services.MessagesServices;
-import com.BootWebapp.WenSocketConnection.WebSocketMessageHandler;
+import com.BootWebapp.WebSocketConnection.WebSocketMessageHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +20,21 @@ import static com.BootWebapp.Model.Message.getFormattedMsgId;
 @Component
 public class MessagesController {
 
-    private MessagesServices messagesServices;
-    private static ObjectMapper converter;
+    private final MessagesServices messagesServices;
+    private final ObjectMapper converter;
 
     @Autowired
-    public void setMessagesServices(MessagesServices messagesServices) {
+    public MessagesController(MessagesServices messagesServices,ObjectMapper converter){
         this.messagesServices = messagesServices;
+        this.converter = converter;
     }
 
-    @Autowired
-    public void setConverter(ObjectMapper converter) {
-        MessagesController.converter = converter;
-    }
-
-    public static Message convertToObject(String body,Integer pID,WebSocketSession session){
+    public Message convertToObject(String body,Integer pID,WebSocketSession session){
 
         try{
 
             Message message = converter.readValue(body,Message.class);
-            message.setSender(Integer.parseInt((String) session.getAttributes().get("user_id")));
+            message.setSender((int)session.getAttributes().get("user_id"));
             message.setMsgId(getFormattedMsgId(message.getMsgId(),pID));
 
             return message;
@@ -54,13 +50,13 @@ public class MessagesController {
 
         try{
 
-            int user_id = Integer.parseInt((String) session.getAttributes().get("user_id"));
+            int user_id = (int)session.getAttributes().get("user_id");
 
             List<Message> messageList = messagesServices.getMessages(user_id,pId);
 
-            if (messageList!=null){
-                String body=converter.writeValueAsString(messageList);
-                String message="{ \"header\": \"msgReceived\", \"body\": " + body + "}";
+            if (messageList != null){
+                String body = converter.writeValueAsString(messageList);
+                String message = "{ \"header\": \"msgReceived\", \"body\": " + body + "}";
                 webSocketHandler.sendToUser(message,session);
             }
 

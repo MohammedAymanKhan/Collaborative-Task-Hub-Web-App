@@ -96,30 +96,38 @@ function deletedChatMessage(messageId){
 // To Update Message
 function updateConvertMsgEleToInputEle(msgSpanElement,msgId){
 
-  let inputElement=document.createElement('input');
-  inputElement.type='text';
-  inputElement.classList.add('text-msg');
-  inputElement.id='chatMsgInput';
-  inputElement.value=msgSpanElement.innerText;
+  //remove hover effect
+  let liParentMsg=msgSpanElement.parentElement;
+  liParentMsg.addEventListener('mouseover', () => {
+    liParentMsg.style.pointerEvents = 'none';
+  });
 
-  inputElement.addEventListener('keypress', (e)=> {
+  msgSpanElement.contentEditable = true;
+  msgSpanElement.id='chatMsgInput';
+  msgSpanElement.classList.add('flex_display');
+
+  msgSpanElement.addEventListener('keypress', (e)=> {
     if (e.key === 'Enter') {
       const message={
         'msgId': msgId,
-        'messageText': inputElement.value,
+        'messageText': msgSpanElement.innerText,
       }
       sendMessage('/updateMessage',message);
-      updatedMsgElementReplaceBack(msgSpanElement,inputElement);
+      updatedMsgElementReplaceBack(msgSpanElement);
     }
   });
-  msgSpanElement.replaceWith(inputElement);
 
 }
 
-function updatedMsgElementReplaceBack(msgSpanElement,inputElement){
+function updatedMsgElementReplaceBack(msgSpanElement){
 
-  msgSpanElement.innerHTML=inputElement.value;
-  inputElement.replaceWith(msgSpanElement);
+  msgSpanElement.contentEditable = false;
+  msgSpanElement.removeAttribute('id');
+  msgSpanElement.classList.remove('flex_display');
+  let liParentMsg=msgSpanElement.parentElement;
+    liParentMsg.addEventListener('mouseover', () => {
+      liParentMsg.style.pointerEvents = 'all';
+    });
 
 }
 

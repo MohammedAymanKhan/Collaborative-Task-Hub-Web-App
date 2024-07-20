@@ -1,4 +1,4 @@
-package com.BootWebapp.WenSocketConnection;
+package com.BootWebapp.WebSocketConnection;
 
 import com.BootWebapp.WebSocketController.MessagesController;
 import com.BootWebapp.WebSocketController.ProjectReportController;

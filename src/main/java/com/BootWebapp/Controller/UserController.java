@@ -25,23 +25,15 @@ public class UserController {
 	}
 	
 	@PostMapping(path = "/login")
-	public String login(@ModelAttribute User user, BindingResult bindingResult, HttpSession session, HttpServletResponse response) {
+	public String login(@ModelAttribute User user, BindingResult bindingResult, HttpSession session) {
 
 
 		if(!bindingResult.hasErrors())
 			user = userRep.userExistsByEmail(user.getEmail());
 
 		if(user != null) {
-
 			session.setAttribute("user", user);
-
-			Cookie userCookie = new Cookie("user_id", user.getUser_id().toString());
-			userCookie.setPath("/");
-			userCookie.setSecure(true);
-			response.addCookie(userCookie);
-
 			return "redirect:/TaskHub.html";
-
 		}
 
 		return "redirect:/index.html";

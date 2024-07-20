@@ -2,7 +2,7 @@ package com.BootWebapp.WebSocketController;
 
 import com.BootWebapp.Model.ProjectReport;
 import com.BootWebapp.Services.ProjectReportServices;
-import com.BootWebapp.WenSocketConnection.WebSocketMessageHandler;
+import com.BootWebapp.WebSocketConnection.WebSocketMessageHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

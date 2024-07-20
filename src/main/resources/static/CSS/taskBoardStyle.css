@@ -338,18 +338,27 @@ main{
   scroll-behavior: smooth;
 }
 
-
-.custom-placeholder::before {
-  content: attr(custome-placeholder);
-  position: absolute;
-  top: 10px;
-  left: 2px;
-  color: #999;
-  opacity: 0.7 !important;
-  z-index: 20;
+/* Custome PlaceHolder */
+.custom-placeholder {
+  position: relative;
 }
 
-.custom-placeholder:focus::before,
-.custom-placeholder:not(:empty)::before {
-  opacity: 0 !important;
+.custom-placeholder::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  top: 30.6%;
+  left: 14px;
+
+  color: #999;
+  opacity: 0.7;
+  z-index: 20;
+
+  transition: opacity 0.2s ease-in-out;
+}
+.custom-placeholder:empty::before {
+  opacity: 1;
+}
+
+.custom-placeholder:focus::before {
+  opacity: 0;
 }
