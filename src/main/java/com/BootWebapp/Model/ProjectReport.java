@@ -1,6 +1,8 @@
 package com.BootWebapp.Model;
 
 
+import org.jetbrains.annotations.Contract;
+
 public class ProjectReport {
 	
 	private String projRepID;
@@ -17,6 +19,14 @@ public class ProjectReport {
 		this.assign = assign;
 		this.progress = progress;
 		this.dueDate = dueDate;
+	}
+
+	public ProjectReport(String projRepID, String taskTittle, String dueDate) {
+		this.projRepID = projRepID;
+		this.taskTittle = taskTittle;
+		this.dueDate = dueDate;
+		this.progress = null;
+		this.assign = null;
 	}
 
 	public String getProjRepID() {

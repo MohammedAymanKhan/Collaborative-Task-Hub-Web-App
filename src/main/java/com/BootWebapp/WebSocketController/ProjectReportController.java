@@ -56,7 +56,7 @@ public class ProjectReportController {
 
         try {
 
-            ProjectReport newProjectReport=converter.readValue(body, ProjectReport.class);
+            ProjectReport newProjectReport = converter.readValue(body, ProjectReport.class);
 
             boolean flag=projectReportServices.addProjectDetails(newProjectReport, pID);
 

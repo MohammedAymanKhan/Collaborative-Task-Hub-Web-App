@@ -104,9 +104,7 @@ public class WebSocketMessageHandler {
     }
 
     public void sendToUser(String message, WebSocketSession session) throws IOException {
-
         session.sendMessage(new TextMessage(message));
-
     }
 
     public void register(WebSocketSession session) {

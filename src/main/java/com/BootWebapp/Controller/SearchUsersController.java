@@ -13,16 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping(method = RequestMethod.GET , path = "/getUsers" , produces = "application/json")
-public class InviteUsersController {
-
+public class SearchUsersController {
 
     private final SearchUsers searchUsers;
 
     @Autowired
-    public InviteUsersController(SearchUsers searchUsers){
+    public SearchUsersController(SearchUsers searchUsers){
         this.searchUsers = searchUsers;
     }
-
 
     @RequestMapping("/byName/{name}")
     public List<User> byName(@PathVariable("name") String byName){

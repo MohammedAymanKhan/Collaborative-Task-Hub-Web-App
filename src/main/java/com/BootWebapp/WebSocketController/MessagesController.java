@@ -36,7 +36,7 @@ public class MessagesController {
             Message message = converter.readValue(body,Message.class);
             message.setSender((int)session.getAttributes().get("user_id"));
             message.setMsgId(getFormattedMsgId(message.getMsgId(),pID));
-
+            message.setSenderName(String.valueOf(session.getAttributes().get("userName")));
             return message;
 
         } catch (JsonProcessingException e) {
@@ -74,7 +74,7 @@ public class MessagesController {
 
             Message message = convertToObject(body,pID,session);
 
-            boolean flag=messagesServices.save(message,pID);
+            boolean flag = messagesServices.save(message,pID);
 
             if(flag){
 

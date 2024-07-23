@@ -24,9 +24,24 @@ public class ProjectReportServices {
 
     public Boolean addProjectDetails(ProjectReport projRep, Integer pid) throws DataAccessException {
 
-        int row = projRepDao.addProjReport(projRep,pid);
-        return row == 1;
+        int row;
 
+        if(projRep.getProgress() != null && projRep.getAssign() != null){
+            row = projRepDao.addProjReportWithNoProgNoAssig(projRep,pid);
+        } else if (projRep.getAssign() != null) {
+            row = projRepDao.addProjReportWithNoProg(projRep,pid);
+        }else if (projRep.getProgress() != null) {
+            row = projRepDao.addProjReportWithNoAssig(projRep,pid);
+        }else{
+            row = projRepDao.addProjReportAllDetails(projRep,pid);
+        }
+
+       if (row == 1){
+           if(projRep.getProgress() == null) projRep.setProgress("In Progress");
+           if(projRep.getAssign() == null) projRep.setAssign("Pending Assignment");
+           return true;
+       }else
+           return false;
     }
 
     public Boolean updateProjDetails(String pRid,String column,String value) throws DataAccessException {

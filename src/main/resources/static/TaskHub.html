@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="CSS/contributerStyle.css">
   <link rel="stylesheet" href="CSS/newTask.css">
   <link rel="stylesheet" href="CSS/userIniviteSection.css">
+  <link rel="stylesheet" href="CSS/navgationBar.css">
   <script src="https://kit.fontawesome.com/96c15e3f6d.js" crossorigin="anonymous"></script>
   <title>Task Hub</title>
 </head>
@@ -37,8 +38,22 @@
   </div>
 
   <div class="user_details | flex_display">
-    <i class="fa-solid fa-user"></i>
-    <h4></h4>
+
+    <div class="notifcation_userInivite">
+
+      <img src="Collaborativetaskboardimages/bell_icon.png" alt="bell_icon" width="25" height="25">
+
+    </div>
+
+    <div class="user_inform">
+      <i class="fa-solid fa-user"></i>
+    </div>
+
+    <div class="logout">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <a href="">Sign out</a>
+    </div>
+
   </div>
 
 </nav>
@@ -51,12 +66,7 @@
 
     <div class="proj_selection_section">
 
-      <select name="proj_selection" id="proj_selection">
-        <option value="Web Development">Web Development</option>
-        <option value="Data Base">Data Base</option>
-        <option value="Back End">Back End</option>
-        <option value="DataBase Copy Web app">DataBase Copy Web app</option>
-      </select>
+      <select name="proj_selection" id="proj_selection"></select>
 
     </div>
 
@@ -158,6 +168,7 @@
 <script src="JS/TaskBoardFun.js"></script>
 <script src="JS/userInvite.js"></script>
 <script src="JS/chatMessages.js"></script>
+<script src="JS/navagation.js"></script>
 
 </body>
 

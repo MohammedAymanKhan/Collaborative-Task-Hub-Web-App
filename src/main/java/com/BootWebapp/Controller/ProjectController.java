@@ -27,19 +27,11 @@ public class ProjectController {
 	}
 
 	@GetMapping("/projects")
-	public Map<String,Object> getProjects(@SessionAttribute User user) {
-
-		Map<String,Object> map = new HashMap<>();
+	public List<Project> getProjects(@SessionAttribute User user) {
 
 		List<Project> projects = projRep.getProjects(user.getUser_id());
+		return projects!=null ? projects : null;
 
-		if(projects!=null) {
-			map.put("userName", user.getFirst_name()+" "+user.getLast_name());
-			map.put("projects", projects);
-			return map;
-		}
-
-		return null;
 	}
 	
 	@PostMapping("/addProject")
@@ -53,5 +45,7 @@ public class ProjectController {
 		return flag ? List.of(project) : null;
 
 	}
+
+	
 
 }

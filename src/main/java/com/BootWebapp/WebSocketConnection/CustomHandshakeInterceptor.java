@@ -43,6 +43,7 @@ public class CustomHandshakeInterceptor implements HandshakeInterceptor {
             if (session != null) {
                 User user = (User)session.getAttribute("user");
                 attributes.put("user_id",user.getUser_id());
+                attributes.put("userName",user.getFirst_name()+" "+user.getLast_name());
             } else {
                 return false;
             }

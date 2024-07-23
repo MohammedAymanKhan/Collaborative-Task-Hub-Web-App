@@ -35,7 +35,7 @@ public class MessageDAO {
             " INNER JOIN chatsrelation c ON m.msgId = c.msgId " +
             " INNER JOIN users u ON u.user_id = c.sender_id " +
             " WHERE c.projId = ? " +
-            " ORDER BY CAST(SUBSTRING_INDEX(m.msgId, '.', -1) AS UNSIGNED);";
+            " ORDER BY CAST(SUBSTRING_INDEX(m.msgId, '.', -1) AS UNSIGNED)";
 
 
     private final JdbcTemplate jdbcTemplate;

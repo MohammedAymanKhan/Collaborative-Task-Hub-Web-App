@@ -59,36 +59,43 @@ function onMessageProjectsDisplay(projectsDetailsData){
 
 
 //Event to CREATE new Project Report Details
-function newProjDetails(){
+function newProjDetails() {
 
-  const parentElement=document.querySelector('.tasks>ul');
-  const id=parentElement.querySelector(":nth-child("+(parentElement.children.length)+")")?.getAttribute('projRepId');
-  const ProjRepID= id!=null ? (Number(id)+0.1).toFixed(2) : (Number(SeletedProjectId)+0.1).toFixed(2);
+  if (projectReport.taskTitle && !projectReport.dueDate) {
+    // Get references to the form elements
+    const taskTitleElement = document.querySelector('.taskForm #task-title');
+    const assignUserElement = document.querySelector('.taskForm #assign-user');
+    const progressElement = document.querySelector('.taskForm #progress');
+    const dueDateElement = document.querySelector('.taskForm #due-date');
 
-  let taskValue=document.querySelector('.taskForm #task-title');
-  let assignValue=document.querySelector('.taskForm #assign-user');
-  let progressValue=document.querySelector('.taskForm #progress');
-  let dueDateValue=document.querySelector('.taskForm #due-date');
+    // Generate a new project report ID
+    const parentElement = document.querySelector('.tasks > ul');
+    const lastChild = parentElement.querySelector(':last-child');
+    const lastProjRepID = lastChild ? Number(lastChild.getAttribute('projRepId')) : Number(SeletedProjectId);
+    const projRepID = (lastProjRepID + 0.1).toFixed(2);
 
-  const ProjectReport={
-    'projRepID':ProjRepID,
-    'taskTittle':taskValue.value,
-    'assign':assignValue.value,
-    'progress':progressValue.value,
-    'dueDate':dueDateValue.value
-  };
+    // Construct the ProjectReport object
+    const projectReport = {
+        projRepID: projRepID,
+        taskTitle: taskTitleElement.value.trim() || null,
+        assign: assignUserElement.value.trim() || null,
+        progress: progressElement.value.trim() || null,
+        dueDate: dueDateElement.value.trim() || null
+    };
 
-  if(taskValue.value&&dueDateValue.value){
+    // Clear the form fields
+    taskTitleElement.value = '';
+    assignUserElement.value = '';
+    progressElement.value = '';
+    dueDateElement.value = '';
 
- 	taskValue.value='';
-    assignValue.value='';
-    progressValue.value='';
-    dueDateValue.value='';
+    // Send the project report
+    sendMessage('/insert', projectReport);
 
-    sendMessage("/insert",ProjectReport);
+  } else{
+    // Check required fields
+    alert('Please fill in the required fields: Task Title and Due Date.');
 
-  }else{
-    alert("Enter the Data in All Input Field");
   }
 
 }

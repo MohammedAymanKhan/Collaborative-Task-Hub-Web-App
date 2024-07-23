@@ -13,9 +13,16 @@ import com.BootWebapp.Model.ProjectReport;
 @Repository
 public class ProjectReportDAO{
 
-	private static final String NEWPROJECTREPORET = "INSERT INTO projectreport VALUES(?,?,?,?,?,?)";
-	private static final String DELETEPROJECTREPORET = "DELETE FROM projectreport WHERE projRepID=?";
-	private static final String GETPROJECTREPORETS = "SELECT projRepID,taskTittle,assign,progress,dueDate FROM " +
+	private static final String NEW_PROJECT_REPORET_ALL_VALUES = "INSERT INTO projectreport(projRepID, taskTittle, " +
+			"assign, progress, dueDate, projId) VALUES(?,?,?,?,?,?)";
+	private static final String NEW_PROJECT_REPORET_NO_ASSIGN_NO_PROGRESS = "INSERT INTO projectreport(projRepID, taskTittle, " +
+			"dueDate, projId) VALUES(?,?,?,?)";
+	private static final String NEW_PROJECT_REPORET_NO_ASSIGN = "INSERT INTO projectreport(projRepID, taskTittle, " +
+			"progress, dueDate, projId) VALUES(?,?,?,?,?)";
+	private static final String NEW_PROJECT_REPORET_NO_PROGRESS = "INSERT INTO projectreport(projRepID, taskTittle, " +
+			"assign, dueDate, projId) VALUES(?,?,?,?,?)";
+	private static final String DELETE_PROJECT_REPORET = "DELETE FROM projectreport WHERE projRepID=?";
+	private static final String GET_PROJECT_REPORETS = "SELECT projRepID,taskTittle,assign,progress,dueDate FROM " +
 			"projectreport WHERE projID=?";
 
 	private final JdbcTemplate jdbcTemplate;
@@ -25,10 +32,31 @@ public class ProjectReportDAO{
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public int addProjReport(ProjectReport projRep,Integer pid) throws DataAccessException {
+	public int addProjReportAllDetails(ProjectReport projRep,Integer pid) throws DataAccessException {
 
-		return jdbcTemplate.update(NEWPROJECTREPORET, projRep.getProjRepID(), projRep.getTaskTittle(),
+		return jdbcTemplate.update(NEW_PROJECT_REPORET_ALL_VALUES, projRep.getProjRepID(), projRep.getTaskTittle(),
 				projRep.getAssign(), projRep.getProgress(), projRep.getDueDate(), pid);
+
+	}
+
+	public int addProjReportWithNoProgNoAssig(ProjectReport projRep,Integer pid) throws DataAccessException {
+
+		return jdbcTemplate.update(NEW_PROJECT_REPORET_NO_ASSIGN_NO_PROGRESS, projRep.getProjRepID(),
+				projRep.getTaskTittle(), projRep.getDueDate(), pid);
+
+	}
+
+	public int addProjReportWithNoAssig(ProjectReport projRep,Integer pid) throws DataAccessException {
+
+		return jdbcTemplate.update(NEW_PROJECT_REPORET_NO_ASSIGN, projRep.getProjRepID(),
+				projRep.getTaskTittle(), projRep.getProgress(), projRep.getDueDate(), pid);
+
+	}
+
+	public int addProjReportWithNoProg(ProjectReport projRep,Integer pid) throws DataAccessException {
+
+		return jdbcTemplate.update(NEW_PROJECT_REPORET_NO_PROGRESS, projRep.getProjRepID(),
+				projRep.getTaskTittle(), projRep.getAssign(), projRep.getDueDate(), pid);
 
 	}
 
@@ -41,14 +69,14 @@ public class ProjectReportDAO{
 
 	public int removeProjReport(Float pRid) throws DataAccessException {
 
-		return jdbcTemplate.update(DELETEPROJECTREPORET, pRid);
+		return jdbcTemplate.update(DELETE_PROJECT_REPORET, pRid);
 
 	}
 	
 
 	public List<ProjectReport> getProjReport(Integer pid) throws DataAccessException {
 
-		return jdbcTemplate.query(GETPROJECTREPORETS, (rs, rowNum) ->
+		return jdbcTemplate.query(GET_PROJECT_REPORETS, (rs, rowNum) ->
 				new ProjectReport(
 					rs.getString("projRepId"),
 					rs.getString("tasktittle"),

@@ -121,28 +121,9 @@ main{
   padding: 0 2rem;
 }
 
-.main_nav{
-  grid-column:2/3;
-  grid-row:1/2;
-  justify-content: space-between;
-  box-shadow: 0 2px 4px var(--shadow-black);
-  padding: 0.74rem;
-  background-color: var(--nav-bg-color);
-  border-radius: 0 3px;
-}
-
-.Collaborative_Task{
-  gap: 15px;
-}
-
-.Collaborative_Task>img{
-  width: 40px;
-}
-
 .assigned_to>ul>li>span{
   font-size: 0.8rem;
 }
-
 
 .bigcard{
   padding: 0.6rem;

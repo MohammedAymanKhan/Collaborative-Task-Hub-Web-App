@@ -1,9 +1,8 @@
 
-#proj_selection>option{
+#proj_selection option {
+  font-size: 1.14rem;
   padding: 20px;
-
-  background-color: blue;
-  border: 2px solid red;
+  background-color: var(--int-bl);
 }
 
 .user_inivite_section{
@@ -107,6 +106,9 @@
   border-radius: 48%;
 
   background-color: var(--int-bl);
+}
+.search_icon_img>img:active{
+  transform: scale(0.9);
 }
 
 .user_display_section{

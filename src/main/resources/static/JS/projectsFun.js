@@ -1,35 +1,38 @@
 getProjects();
-let userName;
-const sendImg=document.querySelector('.sendimg');
+const sendImg = document.querySelector('.sendimg');
+projectsDisplayInSideBar();
 
 //Retrieve Operation
-function getProjects(){
-  
-  fetch('/project/projects', 
-    {
+async function getProjects() {
+  try {
+    const response = await fetch('/project/projects', {
       method: 'GET',
       headers: {
-      'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       }
-    }).then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }else{
-        return response.json();
-      }
-    }).then(data => {
-      userName = data.userName;
-      displayUserName(data.userName);
-      displayProjects(Object.values(data.projects));
-    }).catch(error => {
-      console.error('Fetch error:', error);
-    }); 
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return null;
+  }
 }
 
-//user Name display
-function displayUserName(userName){
-  document.querySelector('.user_details>h4').innerHTML=userName;
+async function projectsDisplayInSideBar(){
+  const data = await getProjects();
+  const projects = Object.values(data);
+  displayProjects(projects);
+  projectsSelectionInInviteBar(projects);
+  addEventListenerToIniviteButton();
 }
+
 
 //By Dom displaying
 function displayProjects(projects){
@@ -110,7 +113,7 @@ function addEventListenerToProjects(project){
       SeletedProjectId='';
       msgBox.innerHTML = '';
       document.querySelector('.main_task_board').style.display = 'none';
-      document.querySelector('.user_inivite_section').style.display = 'grid';
+      enableUserInviteGird();
     }
 
   });
@@ -163,6 +166,7 @@ function addNewProject(projValue){
       return response.json();
     }).then(projects => {
       displayProjects(projects);
+      projectsSelectionInInviteBar(projects);
     }).catch(error => {
       console.error('Fetch error:', error);
     });

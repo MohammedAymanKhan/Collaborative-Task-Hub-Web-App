@@ -4,14 +4,14 @@ const msgText=document.querySelector('#sendMessagesInput');
 
 //Forwords messages to chat Group
 function sendContributerMessages(){
-  let msgId=msgBox.querySelector(":nth-child("+(msgBox.children.length)+")")?.getAttribute('msgId');
-  msgId = msgId!=null ? (Number(msgId)+1).toString() : 0;
+
+  let msgId = msgBox.lastElementChild?.getAttribute('msgId');
+  msgId = msgId != null ? (Number(msgId)+1).toString() : 0;
   const message={
     'msgId': msgId,
-    'messageText':msgText.value,
-    'senderName':userName
+    'messageText':msgText.innerText
   }
-  msgText.value='';
+  msgText.innerText='';
 
   sendMessage('/gotMsg',message);
 }
@@ -34,7 +34,7 @@ function displayProjectsMessages(messageArray){
 // To Display Messages Send by Me(User)
 function displayMessageSendByMe(message){
 
-  let msgElement=getByMsgElement(message);
+  let msgElement = getMyMsgElement(message);
 
   msgElement.querySelector('.msg_upDel .delete').addEventListener('click',()=>{
     sendMessage('/deleteMsg',Number(msgElement.getAttribute('msgId')));
@@ -48,7 +48,7 @@ function displayMessageSendByMe(message){
   scrollToBottomChat();
 
 }
-function getByMsgElement(message){
+function getMyMsgElement(message){
   let liElement=document.createElement('li');
   liElement.setAttribute('msgId',message.msgId);
   liElement.classList.add("message", "flex_display" , "message_By_Me");
@@ -97,10 +97,7 @@ function deletedChatMessage(messageId){
 function updateConvertMsgEleToInputEle(msgSpanElement,msgId){
 
   //remove hover effect
-  let liParentMsg=msgSpanElement.parentElement;
-  liParentMsg.addEventListener('mouseover', () => {
-    liParentMsg.style.pointerEvents = 'none';
-  });
+  msgSpanElement.parentElement.style.pointerEvents = 'none';
 
   msgSpanElement.contentEditable = true;
   msgSpanElement.id='chatMsgInput';
@@ -124,10 +121,7 @@ function updatedMsgElementReplaceBack(msgSpanElement){
   msgSpanElement.contentEditable = false;
   msgSpanElement.removeAttribute('id');
   msgSpanElement.classList.remove('flex_display');
-  let liParentMsg=msgSpanElement.parentElement;
-    liParentMsg.addEventListener('mouseover', () => {
-      liParentMsg.style.pointerEvents = 'all';
-    });
+  msgSpanElement.parentElement.removeAttribute('style');
 
 }
 
