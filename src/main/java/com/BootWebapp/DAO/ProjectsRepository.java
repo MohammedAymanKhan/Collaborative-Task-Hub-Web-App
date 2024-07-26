@@ -2,6 +2,7 @@ package com.BootWebapp.DAO;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,6 +25,17 @@ public class ProjectsRepository{
 			+ " SELECT p.projId, p.projName"
 			+ " FROM projects AS p"
 			+ " WHERE p.createdBy=?";
+	private static final String GET_ASSIGNS_OF_PROJECT = " SELECT DISTINCT u.user_id, " +
+			"COALESCE(CONCAT(u.first_name, ' ', u.last_name), 'Pending Assignment') AS assign " +
+			"FROM users u " +
+			"JOIN workson w ON w.user_id = u.user_id " +
+			"WHERE w.projId = ? " +
+			"UNION " +
+			"SELECT DISTINCT u.user_id, " +
+			"COALESCE(CONCAT(u.first_name, ' ', u.last_name), 'Pending Assignment') AS assign " +
+			"FROM users u " +
+			"JOIN projects p ON p.createdBy = u.user_id " +
+			"WHERE p.projID = ? ";
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -74,6 +86,12 @@ public class ProjectsRepository{
 			,user_id ,user_id
 		);
 
-	}	
+	}
+
+	public List<Map<String,Object>> getAssigns(int projId){
+
+		return jdbcTemplate.queryForList(GET_ASSIGNS_OF_PROJECT, projId, projId);
+
+	}
 	
 }

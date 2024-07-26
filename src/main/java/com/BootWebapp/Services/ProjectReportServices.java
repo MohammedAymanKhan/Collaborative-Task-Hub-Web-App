@@ -3,13 +3,11 @@ package com.BootWebapp.Services;
 import com.BootWebapp.DAO.ProjectReportDAO;
 import com.BootWebapp.Model.ProjectReport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 @Service
 public class ProjectReportServices {
@@ -26,14 +24,17 @@ public class ProjectReportServices {
 
         int row;
 
-        if(projRep.getProgress() != null && projRep.getAssign() != null){
-            row = projRepDao.addProjReportWithNoProgNoAssig(projRep,pid);
-        } else if (projRep.getAssign() != null) {
+        if(projRep.getProgress() != null && projRep.getAssign_id() != -1){
+            row = projRepDao.addProjReportAllDetails(projRep,pid);
+            System.out.println("Both assign and prog: "+projRep);
+        } else if (projRep.getAssign_id() != -1) {
             row = projRepDao.addProjReportWithNoProg(projRep,pid);
+            System.out.println("only assign: "+projRep);
         }else if (projRep.getProgress() != null) {
             row = projRepDao.addProjReportWithNoAssig(projRep,pid);
+            System.out.println("only prog: "+projRep);
         }else{
-            row = projRepDao.addProjReportAllDetails(projRep,pid);
+            row = projRepDao.addProjReportWithNoProgNoAssig(projRep,pid);
         }
 
        if (row == 1){
@@ -44,13 +45,17 @@ public class ProjectReportServices {
            return false;
     }
 
-    public Boolean updateProjDetails(String pRid,String column,String value) throws DataAccessException {
+    public Boolean updateProjDetails(String pRid,String column,Object value) throws DataAccessException {
 
         while (currentUpdateOnColumn.containsKey(pRid) && currentUpdateOnColumn.get(pRid).equals(column))
 
         currentUpdateOnColumn.put(pRid,column);
 
-        int row=projRepDao.updateProjReport(Float.parseFloat(pRid),column,value);
+        if(column.equals("assign")){
+            value = !value.equals("") ? Integer.parseInt((String)value) : -1;
+            column = "assign_id";
+        }
+        int row = projRepDao.updateProjReport(Float.parseFloat(pRid),column,value);
 
         currentUpdateOnColumn.remove(pRid);
 

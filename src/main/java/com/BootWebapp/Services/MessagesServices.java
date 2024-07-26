@@ -54,6 +54,7 @@ public class MessagesServices {
 
             Integer userId = messageDAO.getUserId(message.getMsgId());
             if(message.getSender() == userId){
+                System.out.println("Delete message: "+message);
                 return messageDAO.delete(message.getMsgId());
             }else {
                 return false;

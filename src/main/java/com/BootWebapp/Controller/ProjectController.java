@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,18 +20,18 @@ import com.BootWebapp.DAO.ProjectsRepository;
 @ResponseBody
 public class ProjectController {
 
-	private final ProjectsRepository projRep;
+	private final ProjectsRepository repository;
 
 	@Autowired
-	public ProjectController(ProjectsRepository projRep) {
-		this.projRep = projRep;
+	public ProjectController(ProjectsRepository repository) {
+		this.repository = repository;
 	}
 
 	@GetMapping("/projects")
 	public List<Project> getProjects(@SessionAttribute User user) {
 
-		List<Project> projects = projRep.getProjects(user.getUser_id());
-		return projects!=null ? projects : null;
+		List<Project> projects = repository.getProjects(user.getUser_id());
+		return projects != null ? projects : null;
 
 	}
 	
@@ -39,13 +40,17 @@ public class ProjectController {
 
 		project.setCratedBy(user.getUser_id());
 
-		boolean flag = projRep.addProject(project);
+		boolean flag = repository.addProject(project);
 		project.setCratedBy(null);
 
 		return flag ? List.of(project) : null;
 
 	}
 
-	
+	@GetMapping("/getAssigns/{projId}")
+	public ResponseEntity<Object> getAssigns(@PathVariable("projId") Integer projId){
+		List<Map<String,Object>> assigns = repository.getAssigns(projId);
+		return assigns != null ? ResponseEntity.ok(assigns) : ResponseEntity.notFound().build();
+	}
 
 }

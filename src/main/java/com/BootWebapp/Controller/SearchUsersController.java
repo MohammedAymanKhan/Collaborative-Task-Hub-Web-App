@@ -64,4 +64,5 @@ public class SearchUsersController {
                 ResponseEntity.ok(userList);
 
     }
+
 }

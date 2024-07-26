@@ -6,12 +6,22 @@ import org.jetbrains.annotations.Contract;
 public class ProjectReport {
 	
 	private String projRepID;
-	private String taskTittle;
+	private String taskTittle;//taskTitle
 	private String assign;
+	private Integer assign_id;
 	private String progress;
 	private String dueDate;
 	
 	public ProjectReport() {}
+
+	public ProjectReport(String projRepID, String taskTittle,int assign_id, String assign, String progress, String dueDate) {
+		this.projRepID = projRepID;
+		this.taskTittle = taskTittle;
+		this.assign = assign;
+		this.assign_id = assign_id;
+		this.progress = progress;
+		this.dueDate = dueDate;
+	}
 
 	public ProjectReport(String projRepID, String taskTittle, String assign, String progress, String dueDate) {
 		this.projRepID = projRepID;
@@ -51,6 +61,14 @@ public class ProjectReport {
 
 	public void setAssign(String assign) {
 		this.assign = assign;
+	}
+
+	public Integer getAssign_id() {
+		return assign_id;
+	}
+
+	public void setAssign_id(Integer assign_id) {
+		this.assign_id = assign_id;
 	}
 
 	public String getProgress() {

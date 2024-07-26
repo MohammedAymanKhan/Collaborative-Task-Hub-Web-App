@@ -24,8 +24,8 @@ public class MessageDAO {
     private static final String NEW_MSG_REL = "INSERT INTO chatsRelation(msgId,projId,sender_id,receiver_id) " +
             "VALUES(?,?,?,?)";
     private static final String UPADTE_MSG = "UPDATE messages SET message=? WHERE msgId=?";
-    private static final String DELETE_MSG = "DELETE FROM messages WHERE msgId=?";
-    private static final String DELETE_MSG_REL = "DELETE FROM chatsrelation WHERE msgId=?";
+    private static final String DELETE_MSG = "DELETE FROM messages WHERE msgId = ?";
+    private static final String DELETE_MSG_REL = "DELETE FROM chatsrelation WHERE msgId = ?";
     private static final String MSG_SENDER_ID = "SELECT sender_id FROM chatsrelation WHERE msgId = ? ";
     private static final String GET_MESSAGES = "SELECT m.msgId,m.message," +
             " CASE WHEN u.user_id = ? THEN 'me' " +

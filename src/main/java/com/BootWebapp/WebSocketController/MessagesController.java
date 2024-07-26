@@ -81,6 +81,8 @@ public class MessagesController {
                 String userBody = "{ \"header\": \"messageSendByMe\", \"body\": " + body + " }";
                 webSocketHandler.sendToUser(userBody,session);
 
+                message.setMsgId(Message.convertBackMsgId(message.getMsgId()));
+                body = converter.writeValueAsString(message);
                 String msgBody = "{ \"header\": \"msgReceived\", \"body\": [" + body + "] }";
                 webSocketHandler.forwardMessages(msgBody,session);
 
@@ -93,7 +95,7 @@ public class MessagesController {
 
     }
 
-    public  void updateMessage(String body, Integer pID,WebSocketMessageHandler webSocketHandler, WebSocketSession session)
+    public void updateMessage(String body, Integer pID,WebSocketMessageHandler webSocketHandler, WebSocketSession session)
             throws IOException {
 
         try{
@@ -103,6 +105,8 @@ public class MessagesController {
             boolean flag = messagesServices.update(message);
 
             if(flag){
+                message.setMsgId(Message.convertBackMsgId(message.getMsgId()));
+                body = converter.writeValueAsString(message);
                 String msgBody = "{ \"header\": \"updateMsgGot\", \"body\": " + body + "}";
                 webSocketHandler.forwardToSubscriber(msgBody);
             }
@@ -120,11 +124,12 @@ public class MessagesController {
 
         try{
 
-            Message message=convertToObject(body,pID,session);
+            Message message = convertToObject(body,pID,session);
 
-            boolean flag=messagesServices.remove(message);
+            boolean flag = messagesServices.remove(message);
 
             if(flag){
+                System.out.println("successfully deleted message");
                 String msgBody = "{ \"header\": \"msgDeleted\", \"body\": " + body + "}";
                 webSocketHandler.forwardToSubscriber(msgBody);
             }

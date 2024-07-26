@@ -1,6 +1,4 @@
 let SeletedProjectId;
-let options=[];
-
 
 //by DOM display
 function displayProjectsDetailsData(projectsDetailsDataArray) {
@@ -9,7 +7,6 @@ function displayProjectsDetailsData(projectsDetailsDataArray) {
   const assignedToList = document.querySelector('.assigned_to > ul');
   const progressList = document.querySelector('.progress > ul');
   const dueDateList = document.querySelector('.due_date > ul');
-  const assignInp=document.querySelector('.taskForm #assign-user');
 
   projectsDetailsDataArray.forEach(projectsDetails => {
 
@@ -24,7 +21,7 @@ function displayProjectsDetailsData(projectsDetailsDataArray) {
 
     const dueDateListItem = createListItem('card flex_display', projectsDetails.projRepID,
     'due', `
-    ${dateFormatted(projectsDetails.dueDate)}
+    ${projectsDetails.dueDate}
 
     <i class="fa-solid fa-ellipsis-vertical"></i>
 
@@ -42,17 +39,10 @@ function displayProjectsDetailsData(projectsDetailsDataArray) {
 
     </div>`);
 
-    const optionElement = document.createElement('option');
-    optionElement.innerHTML = `${projectsDetails.assign}`;
-    optionElement.value = projectsDetails.assign;
-
-    options.push(projectsDetails.assign);
-
     taskList.appendChild(taskListItem,taskList.lastElementChild);
     assignedToList.appendChild(assignedToListItem,assignedToList.lastElementChild);
     progressList.appendChild(progressListItem,progressList.lastElementChild);
     dueDateList.appendChild(dueDateListItem,dueDateList.lastElementChild);
-    assignInp.appendChild(optionElement);
     addEventListenerToCard(taskListItem);
     addEventListenerToCard(progressListItem);
     addEventListenerToCard(assignedToListItem);
@@ -78,26 +68,6 @@ function createListItem(classes, id, column, content) {
   return newListItem;
 }
 
-//helps in displaying formatted date
-function dateFormatted(date){
-
-  let arrDate=date.split('-');
-  switch(arrDate[1]){
-    case '01': return arrDate[2]+'-Jan-'+arrDate[0];
-    case '02': return arrDate[2]+'-Feb-'+arrDate[0];
-    case '03': return arrDate[2]+'-Mar-'+arrDate[0];
-    case '12': return arrDate[2]+'-Dec-'+arrDate[0];
-    case '04': return arrDate[2]+'-Apr-'+arrDate[0];
-    case '05': return arrDate[2]+'-May-'+arrDate[0];
-    case '06': return arrDate[2]+'-Jun-'+arrDate[0];
-    case '07': return arrDate[2]+'-July-'+arrDate[0];
-    case '08': return arrDate[2]+'-Aug-'+arrDate[0];
-    case '09': return arrDate[2]+'-Sept-'+arrDate[0];
-    case '10': return arrDate[2]+'-Oct-'+arrDate[0];
-    case '11': return arrDate[2]+'-Nov-'+arrDate[0];
-  }
-}
-
 
 function addEventListenerToCard(card){
 
@@ -107,20 +77,54 @@ function addEventListenerToCard(card){
 
 }
 
+async function getAssigns(projRepId) {
+  try {
+    const response = await fetch(`/project/getAssigns/${projRepId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return [];
+  }
+}
+
+async function populateAssignOptions(inputElement, projRepId) {
+  const assignOptions = await getAssigns(projRepId);
+
+  inputElement.innerHTML = '';
+
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.textContent = 'Pending Assignment';
+  defaultOption.selected = true;
+  inputElement.appendChild(defaultOption);
+
+  assignOptions.forEach(optionText => {
+    const option = document.createElement('option');
+    option.value = optionText.user_id;
+    option.textContent = optionText.assign;
+    inputElement.appendChild(option);
+  });
+}
+
 function cardToInput(card){
 
   let inputElement;
 
   if(card.getAttribute('column')==='assign'){
-    inputElement= document.createElement('select');
+    inputElement = document.createElement('select');
     inputElement.name = 'assign-user';
     inputElement.id = 'assign-user';
-    options.forEach(optionText => {
-      const option = document.createElement('option');
-      option.value = optionText;
-      option.textContent = optionText;
-      inputElement.appendChild(option);
-    });
+    populateAssignOptions(inputElement, SeletedProjectId);
   }else{
     inputElement=document.createElement('input');
     inputElement.type='text';
@@ -137,38 +141,23 @@ function cardToInput(card){
 }
 
 function inputToCard(inputElement,liElement){
+  let assignName = null;
+  if(liElement.getAttribute('column') === 'assign'){
+      const selectedOption = inputElement.options[inputElement.selectedIndex];
+      assignName = selectedOption.innerText;
+  }
 
-  updateProjDetails(liElement.getAttribute('projRepId'),liElement.getAttribute('column'),inputElement.value);
+  updateProjDetails(liElement.getAttribute('projRepId'),liElement.getAttribute('column'),inputElement.value,assignName);
   inputElement.replaceWith(liElement);
 
 }
 
 
-function addNewTask(){
-  document.querySelector('.taskForm button')
-            .addEventListener('click',()=>{
-              newProjDetails();
-            });
-
-  const newTaskForm=document.querySelector('.taskFormdiv');
-  document.querySelector('.due_date .newTask')
-          .addEventListener('click',()=>{
-            document.body.classList.add('bodyadd');
-            newTaskForm.style.display='block';
-          });
-
-  document.querySelector('.taskFormdiv .taskheading .fa-xmark')
-          .addEventListener('click',()=>{
-            newTaskForm.style.display='none';
-            document.body.classList.remove('bodyadd');
-          });
-}
-
 // adding delete Event Listener
 function deleteAddEventLister(deleteItem) {
-    deleteItem.addEventListener('click',()=>{
-      deleteBackendCall(deleteItem.parentElement.parentElement);
-    });
+  deleteItem.addEventListener('click',()=>{
+    deleteBackendCall(deleteItem.parentElement.parentElement);
+  });
 }
 
 

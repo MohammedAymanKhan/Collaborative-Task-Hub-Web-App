@@ -71,6 +71,6 @@ public class UserRepository {
 	}
 
 	public int addtoProjectWorksOn(int user_id, int proj_id){
-		return jdbcTemplate.update(ADD_TO_PROJECT_WORKSON, user_id, proj_id);
+		return jdbcTemplate.update(ADD_TO_PROJECT_WORKSON, proj_id, user_id);
 	}
 }

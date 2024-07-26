@@ -31,7 +31,6 @@ socket.onmessage = function(event) {
 
 };
 
-//socket.close(1000, "Work complete");
 
 function sendMessage(urlRequest,requestBody){
 
@@ -46,8 +45,8 @@ function sendMessage(urlRequest,requestBody){
 function getProjectDetails(projectID){
   sendMessage('/subscribe',projectID);
 }
+
 function onMessageProjectsDisplay(projectsDetailsData){
-  options=[];
   document.querySelector('.tasks > ul').innerHTML='';
   document.querySelector('.assigned_to > ul').innerHTML='';
   document.querySelector('.progress > ul').innerHTML='';
@@ -58,63 +57,69 @@ function onMessageProjectsDisplay(projectsDetailsData){
 }
 
 
-//Event to CREATE new Project Report Details
+// Event to CREATE new Project Report Details
 function newProjDetails() {
+  // Get references to the form elements
+  const taskTitleElement = document.querySelector('.taskForm #task-title');
+  const assignUserElement = document.querySelector('.taskForm #assign-user');
+  const progressElement = document.querySelector('.taskForm #progress');
+  const dueDateElement = document.querySelector('.taskForm #due-date');
 
-  if (projectReport.taskTitle && !projectReport.dueDate) {
-    // Get references to the form elements
-    const taskTitleElement = document.querySelector('.taskForm #task-title');
-    const assignUserElement = document.querySelector('.taskForm #assign-user');
-    const progressElement = document.querySelector('.taskForm #progress');
-    const dueDateElement = document.querySelector('.taskForm #due-date');
-
-    // Generate a new project report ID
-    const parentElement = document.querySelector('.tasks > ul');
-    const lastChild = parentElement.querySelector(':last-child');
-    const lastProjRepID = lastChild ? Number(lastChild.getAttribute('projRepId')) : Number(SeletedProjectId);
-    const projRepID = (lastProjRepID + 0.1).toFixed(2);
-
-    // Construct the ProjectReport object
-    const projectReport = {
-        projRepID: projRepID,
-        taskTitle: taskTitleElement.value.trim() || null,
-        assign: assignUserElement.value.trim() || null,
-        progress: progressElement.value.trim() || null,
-        dueDate: dueDateElement.value.trim() || null
-    };
-
-    // Clear the form fields
-    taskTitleElement.value = '';
-    assignUserElement.value = '';
-    progressElement.value = '';
-    dueDateElement.value = '';
-
-    // Send the project report
-    sendMessage('/insert', projectReport);
-
-  } else{
-    // Check required fields
+  // Validate required fields
+  if (!taskTitleElement.value.trim() || !dueDateElement.value.trim()) {
     alert('Please fill in the required fields: Task Title and Due Date.');
-
+    return;
   }
 
+  // Generate a new project report ID
+  const parentElement = document.querySelector('.tasks > ul');
+  const lastChild = parentElement.querySelector(':last-child');
+  const lastProjRepID = lastChild ? Number(lastChild.getAttribute('projRepId')) : Number(SeletedProjectId);
+  const projRepID = (lastProjRepID + 0.1).toFixed(2);
+
+  // Get selected value and text from the assignUserElement (select element)
+  const assignUserValue = assignUserElement.options[assignUserElement.selectedIndex].value;
+  const assignUserName = assignUserElement.options[assignUserElement.selectedIndex].textContent;
+
+  // Construct the ProjectReport object
+  const projectReport = {
+    'projRepID': projRepID,
+    'taskTittle': taskTitleElement.value.trim(),
+    'assign_id': assignUserValue || -1,
+    'assign': assignUserName || null,
+    'progress': progressElement.value.trim() || null,
+    'dueDate': dueDateElement.value.trim()
+  };
+
+  // Clear the form fields
+  taskTitleElement.value = '';
+  assignUserElement.selectedIndex = 0; // Reset to default option
+  progressElement.value = '';
+  dueDateElement.value = '';
+
+  // Send the project report
+  sendMessage('/insert', projectReport);
 }
+
+
 function onMessageDisplayNewProjectDetails(projectsDetailsData) {
   displayProjectsDetailsData(Object.values([projectsDetailsData]));
 }
 
 /* event to task and progress,assign column li element to input element to UPDATE details */
-function updateProjDetails(projRepId,column,upValue){
+function updateProjDetails(projRepId,column,upValue,assignName){
 
   let updateValue={
     projRepId,
     column,
     upValue
   };
+  if(assignName !== null) updateValue.name = assignName;
   console.log(updateValue);
   sendMessage("/update",updateValue);
 
 }
+
 function onMessageUpdatedValue(updatedData){
 console.log(updatedData);
   cardElement=document.querySelector(`[projrepid="${updatedData.projRepId}"][column="${updatedData.column}"]`);

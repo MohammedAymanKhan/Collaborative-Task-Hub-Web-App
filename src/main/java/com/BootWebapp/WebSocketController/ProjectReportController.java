@@ -58,7 +58,7 @@ public class ProjectReportController {
 
             ProjectReport newProjectReport = converter.readValue(body, ProjectReport.class);
 
-            boolean flag=projectReportServices.addProjectDetails(newProjectReport, pID);
+            boolean flag = projectReportServices.addProjectDetails(newProjectReport, pID);
 
             if(flag){
                 String message = "{ \"header\": \"inserted\", \"body\": " + body + "}";
@@ -80,6 +80,12 @@ public class ProjectReportController {
 
             boolean flag = projectReportServices.updateProjDetails(update.get("projRepId"), update.get("column"),
                     update.get("upValue"));
+
+            if(update.get("column").equals("assign") && update.containsKey("name")){
+                update.put("upValue",update.get("name"));
+                update.remove("name");
+                body = converter.writeValueAsString(update);
+            }
 
             if(flag) {
                 String message = "{ \"header\": \"updated\", \"body\": " + body + "}";

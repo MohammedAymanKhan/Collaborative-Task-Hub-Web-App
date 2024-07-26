@@ -15,6 +15,9 @@ public class Message {
     public static String getFormattedMsgId(String msgId, Integer pId){
         return pId+"."+msgId;
     }
+    public static String convertBackMsgId(String msgId){
+        return msgId.substring(msgId.indexOf(".")+1);
+    }
 
     public static String convertBackToNormalMsgId(String msgId){
         return msgId.split("\\.")[1];

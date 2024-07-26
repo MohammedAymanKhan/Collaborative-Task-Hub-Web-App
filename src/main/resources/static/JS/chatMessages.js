@@ -66,7 +66,7 @@ function getMyMsgElement(message){
   return liElement;
 }
 
-// To diplay Messages send By others
+// To display Messages send By others
 function displayMessage(messages){
     let msgElement=getMsgElement(messages);
     msgBox.appendChild(msgElement);
@@ -90,7 +90,7 @@ function getMsgElement(message){
 
 // To Delete Chat Message
 function deletedChatMessage(messageId){
-  document.querySelector(`[msgId="${messageId}"]`)?.remove();
+  document.querySelector(`[msgId="${messageId}"]`).remove();
 }
 
 // To Update Message
@@ -127,9 +127,7 @@ function updatedMsgElementReplaceBack(msgSpanElement){
 
 function updateMsgFromGroup(updatedMessage){
 
-  let messageElement=document.querySelector(`[msgId="${updatedMessage.msgId}"]`);
-
-  messageElement.querySelector('span').innerHTML=updatedMessage.messageText;
+  document.querySelector(`[msgId="${updatedMessage.msgId}"]`).children[1].innerText = updatedMessage.messageText;
 
 }
 

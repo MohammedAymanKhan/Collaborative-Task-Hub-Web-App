@@ -51,7 +51,7 @@
 }
 
 .projects>li:hover{
-  box-shadow: 6px 6px 5px var(--shadow-black);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .projects>.selectedproject{
