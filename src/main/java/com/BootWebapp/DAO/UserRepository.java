@@ -12,7 +12,8 @@ import java.util.List;
 public class UserRepository {
 
 	private static final String NEW_USER = "INSERT INTO users('email', 'password', 'first_name', 'last_name') VALUES(?,?,?,?)";
-	private static final String USER_BY_EMAIL = "SELECT user_id, first_name, last_name, email FROM users WHERE email = ?";
+	private static final String USER_BY_EMAIL = "SELECT user_id, first_name, last_name, email, password FROM users " +
+			"WHERE email = ?";
 	private static final String INVITE_USER = "INSERT INTO inivitetoprojects(from_id, to_id, projId) VALUES(?,?,?)";
 	private static final String GET_USER_INVITE_MSG = "SELECT p.projId, p.projName FROM projects p, inivitetoprojects i " +
 			"WHERE p.projId = i.projId and i.to_id = ? and i.status = 'pending' ";
@@ -45,7 +46,8 @@ public class UserRepository {
 				return new User(res.getInt("user_id"),
 								res.getString("first_name"),
 								res.getString("last_name"),
-								res.getString("email"));
+								res.getString("email"),
+								res.getString("password"));
 			}else{
 				return null;
 			}

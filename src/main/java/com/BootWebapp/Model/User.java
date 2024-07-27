@@ -1,10 +1,16 @@
 package com.BootWebapp.Model;
 
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class User {
+public class User implements UserDetails{
 
 	private Integer user_id;
 	private String first_name;
@@ -50,22 +56,18 @@ public class User {
 
 	public User() {}
 
-	public User(String first_name, String last_name, String email){
+	public User(Integer user_id, String first_name, String last_name, String email, String password) {
+		this.user_id = user_id;
 		this.first_name = first_name;
 		this.last_name = last_name;
 		this.email = email;
+		this.password = password;
 	}
 
 	public User(Integer user_id , String first_name , String last_name){
 		this.user_id = user_id;
 		this.first_name = first_name;
 		this.last_name = last_name;
-	}
-	public User(String first_name, String last_name, String email, String password) {
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.email = email;
-		this.password = password;
 	}
 
 	public User(int user_id,String first_name, String last_name, String email) {
@@ -91,8 +93,38 @@ public class User {
 		return email;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.singleton(new SimpleGrantedAuthority("USER"));
+	}
+
 	public String getPassword() {
 		return password;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 
 	public void setFirst_name(String first_name) {

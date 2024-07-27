@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="Collaborativetaskboardimages/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="CSS/login.css">
+    <title>login</title>
+
+</head>
+
+<body class="flex-display">
+
+    <div class="loginContainer flex-display">
+        
+      <div class="login_header flex-display">
+        <img src="Collaborativetaskboardimages/icon.png" alt="logo"
+             width="60">
+        Task Hub
+      </div>
+
+        <form class="form_conatiner flex-display" action="/login" method="post">
+
+            <div>
+                <input type="text" name="email" 
+                required 
+                placeholder="Email"/>
+            </div>
+
+            <div>
+                <input type="password" name="password" 
+                required
+                placeholder="Password"/>
+            </div>
+
+            <input type="hidden" name="_csrf" id="csrf" value="">
+
+            <div class="btn_rem_container flex-display">
+
+                <div class="remember-me flex-display">
+                    <label id="remember-me">Remember-me:</label>
+                    <input type="checkbox" name="remember-me"/>
+                </div>
+
+                <div class="submit_btn">
+                    <button type="submit">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+
+        fetch('/user/CSRF/getToken',
+        {
+          method: 'GET',
+          headers: {
+          'Content-Type': 'application/json'
+        }
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }else{
+            return response.text();
+          }
+        }).then(data => {
+          document.querySelector('#csrf').value = data;
+          console.log('CSRF Token Value:'+ data);
+        }).catch(error => {
+          alert("refresh again");
+        });
+
+    </script>
+
+</body>
+
+</html>

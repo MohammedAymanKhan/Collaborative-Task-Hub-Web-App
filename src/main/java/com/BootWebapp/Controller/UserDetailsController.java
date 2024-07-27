@@ -2,9 +2,14 @@ package com.BootWebapp.Controller;
 
 import com.BootWebapp.DAO.UserDetailsService;
 import com.BootWebapp.Model.Project;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,25 +26,36 @@ import java.util.Objects;
 public class UserDetailsController {
 	
 	private final UserDetailsService service;
+	private final CsrfTokenRepository csrfTokenRepository;
 
 	@Autowired
-	public UserDetailsController(UserDetailsService service) {
+	public UserDetailsController(UserDetailsService service,CsrfTokenRepository csrfTokenRepository) {
 		this.service = service;
+		this.csrfTokenRepository = csrfTokenRepository;
 	}
-	
-	@PostMapping(path = "/login")
-	public String login(@ModelAttribute User user, BindingResult bindingResult, HttpSession session) {
+	@GetMapping("/CSRF/getToken")
+	public @ResponseBody String getCsrfToken(HttpServletRequest request, HttpServletResponse response){
+		CsrfToken token = csrfTokenRepository.generateToken(request);
+		csrfTokenRepository.saveToken(token,request,response);
+		System.out.println("called csrf token:");
+		return token.getToken();
+	}
 
+	@GetMapping("/myLogin")
+	public String getLoginPage(){
+		return "redirect:/login.html";
+	}
 
-		if(!bindingResult.hasErrors())
-			user = service.existsUser(user.getEmail());
+	@GetMapping(path = "/taskHub")
+	public String redirectTaskHub(HttpSession session){
+		Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		session.setAttribute("user", user);
+		return "redirect:/TaskHub.html";
+	}
 
-		if(user != null) {
-			session.setAttribute("user", user);
-			return "redirect:/TaskHub.html";
-		}
-
-		return "redirect:/index.html";
+	@PostMapping(path = "/failed/login")
+	public @ResponseBody String falidToLogin(){
+		return "<h1>Falid to login</h1>";
 	}
 
 	@PostMapping("/invite/{toUserId}/{projectId}")

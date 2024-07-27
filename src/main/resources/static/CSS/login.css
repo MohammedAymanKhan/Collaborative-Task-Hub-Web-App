@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=LXGW+WenKai+TC&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=LXGW+WenKai+TC&family=Noto+Sans+KR:wght@100..900&display=swap');
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root{
+  --drk-blu-clr : #010101;
+  --lg-black-clr :  #171719;
+  --white-clr : white;
+  --lig-blu-clr : #7364E5;
+}
+
+.flex-display{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body{
+  color: inherit;
+  font-family: inherit;
+}
+
+body{
+  font-family: "Noto Sans KR","LXGW WenKai TC",sans-serif,cursive;
+
+  font-weight: 400;
+  font-size: 1.5rem;
+
+  width: 100%;
+  height: 100vh;
+
+  color: var(--white-clr);
+  background-color: var(--drk-blu-clr);
+}
+
+.loginContainer{
+  border: 2.6px solid var(--lg-black-clr);
+  border-radius: 5px;
+
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 1.8rem;
+  width: 360px;
+  height: 300px;
+}
+
+input{
+  font-family: inherit;
+
+  color: var(--white-clr);
+  background-color: var(--lg-black-clr);
+
+  padding: 0.8rem;
+  width: 100%;
+
+  border-radius: 4px;
+  border: 2px solid var(--lg-black-clr);
+}
+
+.login_header{
+  justify-content: flex-start;
+  gap: 8px;
+
+  font-weight: 700;
+
+  padding-bottom: 0.8rem;
+  width: 100%;
+}
+
+.login_header > img{
+  width: 38px;
+}
+
+.form_conatiner{
+  width: 100%;
+  
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.form_conatiner > div{
+  width: 100%;
+}
+
+.btn_rem_container{
+  justify-content: space-between;
+}
+.remember-me{
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 0.9rem;
+
+  gap: 12px;
+  text-wrap: nowrap;
+}
+.remember-me > input[type="checkbox"]{
+  width: fit-content;
+  width: 10px;
+  height: 10px;
+  transform: scale(1.5);
+  accent-color: var(--lig-blu-clr);
+}
+.submit_btn > button{
+  padding: 0.6rem 1.1rem;
+
+  color: var(--white-clr);
+  background-color: var(--lig-blu-clr);
+
+  border: none;
+  border-radius: 6px;
+}
