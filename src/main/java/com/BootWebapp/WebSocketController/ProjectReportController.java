@@ -92,7 +92,7 @@ public class ProjectReportController {
                 webSocketHandler.forwardToSubscriber(message);
             }
 
-        } catch (DataAccessException exc) {
+        } catch (DataAccessException | InterruptedException exc) {
             String errorMsg = "\"Error not able update\"";
             webSocketHandler.sendToUser("{ \"header\": \"error\", \"body\": " + errorMsg + "}",session);
         }

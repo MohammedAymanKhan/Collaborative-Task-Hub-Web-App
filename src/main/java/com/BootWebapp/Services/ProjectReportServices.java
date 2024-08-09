@@ -13,7 +13,7 @@ import java.util.*;
 public class ProjectReportServices {
 
     private final ProjectReportDAO projRepDao;
-    private static final Map<String,String> currentUpdateOnColumn = new HashMap<>();
+    private static final HashMap<String,Object> currentUpdateOnColumn = new HashMap<>();
 
     @Autowired
     public ProjectReportServices(ProjectReportDAO projRepDao) {
@@ -45,21 +45,21 @@ public class ProjectReportServices {
            return false;
     }
 
-    public Boolean updateProjDetails(String pRid,String column,Object value) throws DataAccessException {
+    public Boolean updateProjDetails(String pRid,String column,Object value) throws DataAccessException, InterruptedException {
 
-        while (currentUpdateOnColumn.containsKey(pRid) && currentUpdateOnColumn.get(pRid).equals(column))
-
-        currentUpdateOnColumn.put(pRid,column);
-
-        if(column.equals("assign")){
-            value = !value.equals("") ? Integer.parseInt((String)value) : -1;
-            column = "assign_id";
+        if(!currentUpdateOnColumn.containsKey(pRid+";"+column)){
+            currentUpdateOnColumn.put(pRid+";"+column,new Object());
         }
-        int row = projRepDao.updateProjReport(Float.parseFloat(pRid),column,value);
 
-        currentUpdateOnColumn.remove(pRid);
+        synchronized (currentUpdateOnColumn.get(pRid+";"+column)) {
+            if (column.equals("assign")) {
+                value = !value.equals("") ? Integer.parseInt((String) value) : -1;
+                column = "assign_id";
+            }
+            int row = projRepDao.updateProjReport(Float.parseFloat(pRid), column, value);
 
-        return row==1;
+            return row == 1;
+        }
 
     }
 
